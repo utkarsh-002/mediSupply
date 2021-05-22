@@ -21,6 +21,8 @@ class DrugContract extends Contract {
         const asset = { drugName, manufacturer, mfdDate, expiryDate, batchId};
         const buffer = Buffer.from(JSON.stringify(asset));
         await ctx.stub.putState(drugId, buffer);
+        const txId = ctx.stub.getTxID();
+        return txId;
     }
 
     async readDrug(ctx, drugId) {
@@ -41,6 +43,8 @@ class DrugContract extends Contract {
         const asset = { drugName: newDrugName, manufacturer: newManufacturer, mfdDate: newMfdDate, expiryDate: newExpiryDate, batchId:newBatchId};
         const buffer = Buffer.from(JSON.stringify(asset));
         await ctx.stub.putState(drugId, buffer);
+        const txId = ctx.stub.getTxID();
+        return txId;
     }
 
     async deleteDrug(ctx, drugId) {
