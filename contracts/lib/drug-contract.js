@@ -13,12 +13,12 @@ class DrugContract extends Contract {
         return (!!buffer && buffer.length > 0);
     }
 
-    async createDrug(ctx, drugId, value) {
+    async createDrug(ctx, drugId, drugName, manufacturer, mfdDate, expiryDate, batchId) {
         const exists = await this.drugExists(ctx, drugId);
         if (exists) {
             throw new Error(`The drug ${drugId} already exists`);
         }
-        const asset = { value };
+        const asset = { drugName, manufacturer, mfdDate, expiryDate, batchId};
         const buffer = Buffer.from(JSON.stringify(asset));
         await ctx.stub.putState(drugId, buffer);
     }
@@ -33,12 +33,12 @@ class DrugContract extends Contract {
         return asset;
     }
 
-    async updateDrug(ctx, drugId, newValue) {
+    async updateDrug(ctx, drugId, newDrugName, newManufacturer, newMfdDate, newExpiryDate, newBatchId) {
         const exists = await this.drugExists(ctx, drugId);
         if (!exists) {
             throw new Error(`The drug ${drugId} does not exist`);
         }
-        const asset = { value: newValue };
+        const asset = { drugName: newDrugName, manufacturer: newManufacturer, mfdDate: newMfdDate, expiryDate: newExpiryDate, batchId:newBatchId};
         const buffer = Buffer.from(JSON.stringify(asset));
         await ctx.stub.putState(drugId, buffer);
     }
