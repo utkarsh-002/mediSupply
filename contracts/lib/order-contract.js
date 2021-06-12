@@ -88,6 +88,9 @@ class OrderContract extends Contract {
             await ctx.stub.putState(orderId, buffer);
             return "Verified";
         }
+        else if(currentOwner === 'D'){
+            return "Verified";
+        }
         else{
             return "Not verified";
         }
@@ -110,6 +113,9 @@ class OrderContract extends Contract {
             const asset = { drugId, drugName, quantity, currentOwner: newCurrentOwner, status};
             const buffer = Buffer.from(JSON.stringify(asset));
             await ctx.stub.putState(orderId, buffer);
+            return "Verified";
+        }
+        else if(currentOwner === 'R'){
             return "Verified";
         }
         else{
@@ -135,6 +141,9 @@ class OrderContract extends Contract {
             const asset = { drugId, drugName, quantity, currentOwner: newCurrentOwner, status: newStatus};
             const buffer = Buffer.from(JSON.stringify(asset));
             await ctx.stub.putState(orderId, buffer);
+            return "Verified";
+        }
+        else if(currentOwner === 'C'){
             return "Verified";
         }
         else{
