@@ -4,12 +4,20 @@
   "description": "Backend server for Blockchian based application named Medscan",
   "main": "server.js",
   "scripts": {
-    "start" : "node server.js",
+    "start": "./node_modules/nodemon/bin/nodemon.js src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Manvendra Bansal , Laveesh Gupta , Muskan Gupta , Nishit Khaitan",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "eslint": "^6.0.1",
+    "express": "^4.17.1",
+    "fabric-ca-client": "~1.4.2",
+    "fabric-client": "^1.4.3",
+    "fabric-network": "~1.4.2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.1"
   }
 }

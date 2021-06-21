@@ -4,10 +4,8 @@
 
 'use strict';
 
-const DrugContract = require('./lib/drug-contract');
-const OrderContract = require('./lib/order-contract');
+const MyAssetContract = require('./lib/MyAssetContract');
 
-module.exports.DrugContract = DrugContract;
-module.exports.OrderContract = OrderContract;
+module.exports.MyAssetContract = MyAssetContract;
 
-module.exports.contracts = [ DrugContract, OrderContract ];
+module.exports.contracts = [ MyAssetContract ];
