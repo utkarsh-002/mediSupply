@@ -130,11 +130,11 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
           console.log(func);
           console.log(typeof args);
   
-          args = JSON.parse(args[0]);
+          // args = JSON.parse(args[0]);
   
-          console.log(util.inspect(args));
-          args = JSON.stringify(args);
-          console.log(util.inspect(args));
+          // console.log(util.inspect(args));
+          // args = JSON.stringify(args);
+          // console.log(util.inspect(args));
   
           console.log('before submit');
           console.log(util.inspect(networkObj));
@@ -168,13 +168,10 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
 
 
 
-
-
-
 //Client application part for registering a new manufacturer
 
 
-exports.registerManufacturer = async function (manufacturerId, name) {
+exports.registerManufacturer = async function (manufacturerId, name, licenceId, establishedDate, registeredDate, address, contact) {
 
  
 
@@ -184,7 +181,7 @@ exports.registerManufacturer = async function (manufacturerId, name) {
   console.log('name');
   console.log(name);
 
-if (!manufacturerId || !name) {
+if (!manufacturerId || !name || !licenceId || !establishedDate || !registeredDate || !address || !contact) {
     let response = {};
     response.error = 'Error! You need to fill all fields before you can register!';
     return response;
@@ -245,73 +242,148 @@ if (!manufacturerId || !name) {
 };
 
 
-//Client application part for registering a new Doctor
+
+//Client application part for registering a new distributor
+
+exports.registerDistributor = async function (distributorId, name, licenceId, registeredDate, capacity, state, city, address, contact) {
 
  
-// exports.registerDoctor = async function (doctorId, licenseId, name, age, phNo) {
 
-//   console.log('LicenseId');
-//   console.log(licenseId);
+  console.log('distributorId');
+  console.log(distributorId);
 
-//   console.log('name');
-//   console.log(name);
+  console.log('name');
+  console.log(name);
 
-// if (!licenseId || !name || !age || !phNo) {
-//     let response = {};
-//     response.error = 'Error! You need to fill all fields before you can register!';
-//     return response;
-//   }
+if (!distributorId || !name || !licenceId || !registeredDate || !capacity || !state || !city || !address || !contact) {
+    let response = {};
+    response.error = 'Error! You need to fill all fields before you can register!';
+    return response;
+  }
 
-//   try {
+  try {
 
-//     // Create a new file system based wallet for managing identities.
-//     const walletPath = path.join(process.cwd(), 'wallet');
-//     const wallet = new FileSystemWallet(walletPath);
-//     console.log(`Wallet path: ${walletPath}`);
-//     console.log(wallet);
+    // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), 'wallet');
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+    console.log(wallet);
 
-//     // Check to see if we've already enrolled the user.
-//     const userExists = await wallet.exists(doctorId);
-//     if (userExists) {
-//       let response = {};
-//       console.log(`An identity for the user ${doctorId} already exists in the wallet`);
-//       response.error = `Error! An identity for the user ${doctorId} already exists in the wallet. Please enter a different license number.`;
-//       return response;
-//     }
+    // Check to see if we've already enrolled the user.
+    const userExists = await wallet.exists(distributorId);
+    if (userExists) {
+      let response = {};
+      console.log(`An identity for the distributor with distributorId ${distributorId} already exists in the wallet`);
+      response.error = `Error! An identity for the distributor with distributorId ${distributorId} already exists in the wallet.`;
+      return response;
+    }
 
-//     // Check to see if we've already enrolled the admin user.
-//     const adminExists = await wallet.exists(appAdmin_pat);
-//     if (!adminExists) {
-//       console.log(`An identity for the admin user ${appAdmin_pat} does not exist in the wallet`);
-//       console.log('Run the enrollAdmin.js application before retrying');
-//       let response = {};
-//       response.error = `An identity for the admin user ${appAdmin_pat} does not exist in the wallet. 
-//         Run the enrollAdmin.js application before retrying`;
-//       return response;
-//     }
+    // Check to see if we've already enrolled the admin user.
+    const adminExists = await wallet.exists(appAdmin);
+    if (!adminExists) {
+      console.log(`An identity for the admin user ${appAdmin} does not exist in the wallet`);
+      console.log('Run the enrollAdmin.js application before retrying');
+      let response = {};
+      response.error = `An identity for the admin user ${appAdmin} does not exist in the wallet. 
+        Run the enrollAdmin.js application before retrying`;
+      return response;
+    }
 
-//     // Create a new gateway for connecting to our peer node.
-//     const gateway = new Gateway();
-//     await gateway.connect(ccp, { wallet, identity: appAdmin_pat, discovery: gatewayDiscovery });
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
 
-//     // Get the CA client object from the gateway for interacting with the CA.
-//     const ca = gateway.getClient().getCertificateAuthority();
-//     const adminIdentity = gateway.getCurrentIdentity();
-//     console.log(`AdminIdentity: + ${adminIdentity}`);
+    // Get the CA client object from the gateway for interacting with the CA.
+    const ca = gateway.getClient().getCertificateAuthority();
+    const adminIdentity = gateway.getCurrentIdentity();
+    console.log(`AdminIdentity: + ${adminIdentity}`);
 
-//     // Register the user, enroll the user, and import the new identity into the wallet.
-//     const secret = await ca.register({ affiliation: '', enrollmentID: doctorId, role: 'client' }, adminIdentity);
+    // Register the user, enroll the user, and import the new identity into the wallet.
+    const secret = await ca.register({ affiliation: '', enrollmentID: distributorId, role: 'client' }, adminIdentity);
 
-//     const enrollment = await ca.enroll({ enrollmentID: doctorId, enrollmentSecret: secret });
-//     const userIdentity = await X509WalletMixin.createIdentity(orgMSPID_doc, enrollment.certificate, enrollment.key.toBytes());
-//     await wallet.import(doctorId, userIdentity);
-//     console.log(`Successfully registered Doctor ${name} . Use DoctorId ${doctorId} and password: doctor99 to login above.`); //password is static and set to doctor99 for doctors
-//     let response = `Successfully registered Doctor ${name} . Use DoctorId ${doctorId} and password: doctor99 to login above.`;
-//     return response;
-//   } catch (error) {
-//     console.error(`Failed to register doctor + ${licenseId} + : ${error}`);
-//     let response = {};
-//     response.error = error;
-//     return response;
-//   }
-// };
+    const enrollment = await ca.enroll({ enrollmentID: distributorId, enrollmentSecret: secret });
+    const userIdentity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+    await wallet.import(distributorId, userIdentity);
+    console.log(`Successfully registered distributor ${name} . Use distributorId ${distributorId} and password: secret99 to login above.`); //password is static and set to secret99 for distributor
+    let response = `Successfully registered distributor ${name} . Use distributorId ${distributorId} and password: secret99 to login above.`;
+    return response;
+  } catch (error) {
+    console.error(`Failed to register distributor + ${name} + : ${error}`);
+    let response = {};
+    response.error = error;
+    return response;
+  }
+};
+
+
+//Client application part for registering a new retailer
+
+exports.registerRetailer = async function (retailerId, name, licenceId, registeredDate, address, contact) {
+
+ 
+
+  console.log('retailerId');
+  console.log(retailerId);
+
+  console.log('name');
+  console.log(name);
+
+if (!retailerId || !name || !licenceId || !registeredDate || !address || !contact) {
+    let response = {};
+    response.error = 'Error! You need to fill all fields before you can register!';
+    return response;
+  }
+
+  try {
+
+    // Create a new file system based wallet for managing identities.
+    const walletPath = path.join(process.cwd(), 'wallet');
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+    console.log(wallet);
+
+    // Check to see if we've already enrolled the user.
+    const userExists = await wallet.exists(retailerId);
+    if (userExists) {
+      let response = {};
+      console.log(`An identity for the retailer with retailerId ${retailerId} already exists in the wallet`);
+      response.error = `Error! An identity for the retailer with retailerId ${retailerId} already exists in the wallet.`;
+      return response;
+    }
+
+    // Check to see if we've already enrolled the admin user.
+    const adminExists = await wallet.exists(appAdmin);
+    if (!adminExists) {
+      console.log(`An identity for the admin user ${appAdmin} does not exist in the wallet`);
+      console.log('Run the enrollAdmin.js application before retrying');
+      let response = {};
+      response.error = `An identity for the admin user ${appAdmin} does not exist in the wallet. 
+        Run the enrollAdmin.js application before retrying`;
+      return response;
+    }
+
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, { wallet, identity: appAdmin, discovery: gatewayDiscovery });
+
+    // Get the CA client object from the gateway for interacting with the CA.
+    const ca = gateway.getClient().getCertificateAuthority();
+    const adminIdentity = gateway.getCurrentIdentity();
+    console.log(`AdminIdentity: + ${adminIdentity}`);
+
+    // Register the user, enroll the user, and import the new identity into the wallet.
+    const secret = await ca.register({ affiliation: '', enrollmentID: retailerId, role: 'client' }, adminIdentity);
+
+    const enrollment = await ca.enroll({ enrollmentID: retailerId, enrollmentSecret: secret });
+    const userIdentity = await X509WalletMixin.createIdentity(orgMSPID, enrollment.certificate, enrollment.key.toBytes());
+    await wallet.import(retailerId, userIdentity);
+    console.log(`Successfully registered retailer ${name} . Use retailerId ${retailerId} and password: secret99 to login above.`); //password is static and set to secret99 for retailer
+    let response = `Successfully registered retailer ${name} . Use retailerId ${retailerId} and password: secret99 to login above.`;
+    return response;
+  } catch (error) {
+    console.error(`Failed to register retailer + ${name} + : ${error}`);
+    let response = {};
+    response.error = error;
+    return response;
+  }
+};
