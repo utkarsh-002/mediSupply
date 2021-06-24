@@ -17,14 +17,24 @@ class MyAssetContract extends Contract {
         return (!!buffer && buffer.length > 0);
     }
 
-    async createDrug(ctx, drugId, drugName, manufacturer, mfdDate, expiryDate, batchId) {
-        const exists = await this.drugExists(ctx, drugId);
+    async createDrug(ctx, drugData) {
+        drugData = JSON.parse(drugData);
+        console.log(typeof(drugData));
+        const exists = await this.drugExists(ctx, drugData.drugId);
         if (exists) {
-            throw new Error(`The drug ${drugId} already exists`);
+            throw new Error(`The drug ${drugData.drugId} already exists`);
         }
-        const asset = { drugName, manufacturer, mfdDate, expiryDate, batchId};
+
+        const asset = { 
+            drugName : drugData.drugName, 
+            manufacturer : drugData.drugManufacturer , 
+            mfdDate : drugData.manDate, 
+            expiryDate : drugData.expiryDate, 
+            batchId : drugData.batchId
+        };
+
         const buffer = Buffer.from(JSON.stringify(asset));
-        await ctx.stub.putState(drugId, buffer);
+        await ctx.stub.putState(drugData.drugId, buffer);
         const txId = ctx.stub.getTxID();
         return txId;
     }
@@ -39,24 +49,35 @@ class MyAssetContract extends Contract {
         return asset;
     }
 
-    async updateDrug(ctx, drugId, newDrugName, newManufacturer, newMfdDate, newExpiryDate, newBatchId) {
-        const exists = await this.drugExists(ctx, drugId);
+    async updateDrug(ctx,newDrugData) {
+        newDrugData  = JSON.parse(newDrugData);
+        const exists = await this.drugExists(ctx, newDrugData.drugId);
         if (!exists) {
-            throw new Error(`The drug ${drugId} does not exist`);
+            throw new Error(`The drug ${newDrugData.drugId} does not exist`);
         }
-        const asset = { drugName: newDrugName, manufacturer: newManufacturer, mfdDate: newMfdDate, expiryDate: newExpiryDate, batchId:newBatchId};
+        const asset = { 
+            drugName : newDrugData.drugName, 
+            manufacturer : newDrugData.drugManufacturer , 
+            mfdDate : newDrugData.manDate, 
+            expiryDate : newDrugData.expiryDate, 
+            batchId : newDrugData.batchId
+        };
+            
         const buffer = Buffer.from(JSON.stringify(asset));
-        await ctx.stub.putState(drugId, buffer);
+        await ctx.stub.putState(newDrugData.drugId, buffer);
         const txId = ctx.stub.getTxID();
         return txId;
     }
 
     async deleteDrug(ctx, drugId) {
+        drugId = JSON.parse(drugId);
         const exists = await this.drugExists(ctx, drugId);
         if (!exists) {
             throw new Error(`The drug ${drugId} does not exist`);
         }
         await ctx.stub.deleteState(drugId);
+        const txId = ctx.stub.getTxID();
+        return txId;
     }
 
     async orderExists(ctx, orderId) {
@@ -64,23 +85,29 @@ class MyAssetContract extends Contract {
         return (!!buffer && buffer.length > 0);
     }
 
-    async createOrder(ctx, orderId, drugId, quantity, currentOwner, status) {
-        // const drugContext = network.getContract(drug-contract);
-        const check = await ctx.stub.getState(drugId);
+    async createOrder(ctx, orderData) {
+        orderData = JSON.parse(orderData);
+        const check = await ctx.stub.getState(orderData.drugId);
         const drugExists = (!!check && check.length > 0);
         if (!drugExists) {
-            throw new Error(`The drug ${drugId} does not exist`);
+            throw new Error(`The drug ${orderData.drugId} does not exist`);
         }
-        const exists = await this.orderExists(ctx, orderId);
+        const exists = await this.orderExists(ctx, orderData.orderId);
         if (exists) {
-            throw new Error(`The order ${orderId} already exists`);
+            throw new Error(`The order ${orderData.orderId} already exists`);
         }
-        const fetched = await ctx.stub.getState(drugId);
+        const fetched = await ctx.stub.getState(orderData.drugId);
         const read = JSON.parse(fetched.toString());
         const drugName = read.drugName;
-        const asset = { drugId, drugName, quantity, currentOwner, status};
+        const asset = { 
+            drugId : orderData.drugId, 
+            drugName , 
+            quantity : orderData.quantity, 
+            currentOwner : orderData.currentOwner, 
+            status : orderData.status
+        };
         const buffer = Buffer.from(JSON.stringify(asset));
-        await ctx.stub.putState(orderId, buffer);
+        await ctx.stub.putState(orderData.orderId, buffer);
         const txId = ctx.stub.getTxID();
         return txId;
     }
@@ -95,7 +122,9 @@ class MyAssetContract extends Contract {
         return asset;
     }
 
-    async updateOrder(ctx, orderId, newCurrentOwner, newStatus) {
+    async updateOrder(ctx,newOrderData) {
+        newOrderData = JSON.parse(newOrderData);
+        const { orderId , newCurrentOwner , newStatus } = newOrderData;
         const exists = await this.orderExists(ctx, orderId);
         if (!exists) {
             throw new Error(`The order ${orderId} does not exist`);
@@ -113,14 +142,18 @@ class MyAssetContract extends Contract {
     }
 
     async deleteOrder(ctx, orderId) {
+        orderId = JSON.parse(orderId);
         const exists = await this.orderExists(ctx, orderId);
         if (!exists) {
             throw new Error(`The order ${orderId} does not exist`);
         }
         await ctx.stub.deleteState(orderId);
+        const txId = ctx.stub.getTxID();
+        return txId;
     }
 
     async verifyAsDistributor(ctx, orderId) {
+        orderId = JSON.parse(orderId);
         const exists = await this.orderExists(ctx, orderId);
         if (!exists) {
             throw new Error(`The order ${orderId} does not exist`);
@@ -148,6 +181,7 @@ class MyAssetContract extends Contract {
     }
 
     async verifyAsRetailer(ctx, orderId) {
+        orderId = JSON.parse(orderId);
         const exists = await this.orderExists(ctx, orderId);
         if (!exists) {
             throw new Error(`The order ${orderId} does not exist`);
@@ -175,6 +209,7 @@ class MyAssetContract extends Contract {
     }
 
     async verifyAsConsumer(ctx, orderId) {
+        orderId = JSON.parse(orderId);
         const exists = await this.orderExists(ctx, orderId);
         if (!exists) {
             throw new Error(`The order ${orderId} does not exist`);
