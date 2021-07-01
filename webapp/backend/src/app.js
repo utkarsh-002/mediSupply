@@ -20,11 +20,19 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cors());
 
+const connectDB = require("../config/database")
+
 const configPath = path.join(process.cwd(), './config.json');
 const configJSON = fs.readFileSync(configPath, 'utf8');
 const config = JSON.parse(configJSON);
+connectDB()
 
-
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const auth = require("../middleware/auth")
+const User = require("../models/user")
+const { check, validationResult } = require("express-validator");
+const conf = require("config");
 
 //use these identities for general queries
 const appAdmin = config.appAdmin;
@@ -38,6 +46,122 @@ app.use(function(req, res, next) {
   next();
 });
 */
+app.get("/", auth, async (req, res) => {
+  try {
+      const user = await User.findById(req.user.id).select("-password");
+      res.json(user);
+  } catch (err) {
+      console.log(err);
+      res.status(500).json("Server Error");
+  }
+});
+
+//to register
+app.post(
+  "/register",
+  [
+      check("userName", "Name is required").not().isEmpty(),
+      // check("lastName", "Last Name is required").not().isEmpty(),
+      check("email", "Please enter a valid EmailId").isEmail(),
+      check("password", "Password should have min 6 characters").isLength({
+          min: 6,
+          max: 32,
+      }),
+      check("role","Role is required").not().isEmpty(),
+      check("license_number","license number is required").not().isEmpty()
+  ],
+  async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+      }
+      const { userName, email, password, role, license_number, address,contact } = req.body;
+      try {
+          let user = await User.findOne({ email });
+          if (user) {
+              return res
+                  .status(400)
+                  .json({ errors: [{ msg: "user already exists" }] });
+          }
+
+          user = new User({
+              userName,
+              email,
+              password,
+              role, 
+              license_number, 
+              address,
+              contact
+          });
+          const salt = await bcrypt.genSalt(10);
+          user.password = await bcrypt.hash(password, salt);
+          await user.save();
+          const payload = {
+              user: {
+                  id: user.id,
+              },
+          };
+          jwt.sign(
+              payload,
+              conf.get("jwtSecret"),
+              { expiresIn: 3600000 },
+              (err, token) => {
+                  if (err) throw err;
+                  else res.json({ token });
+              }
+          );
+      } catch (err) {
+          console.error(err.message);
+          res.status(500).send("server Error");
+      }
+  }
+);
+
+// to login user
+app.post("/login", [
+  check("email", "Please enter a valid EmailId").isEmail(),
+  check("password", "Password is required").exists(),
+  async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+      }
+      const { email, password } = req.body;
+      try {
+          let user = await User.findOne({ email });
+          if (!user) {
+              return res
+                  .status(400)
+                  .json({ errors: [{ msg: "Invalid Credentials" }] });
+          }
+
+          const isMatch = await bcrypt.compare(password, user.password);
+
+          if (!isMatch) {
+              return res
+                  .status(400)
+                  .json({ errors: [{ msg: "Invalid Credentials" }] });
+          }
+
+          const payload = {
+              user: {
+                  id: user.id,
+              },
+          };
+          jwt.sign(
+              payload,
+              conf.get("jwtSecret"),
+              { expiresIn: 3600000 },
+              (err, token) => {
+                  if (err) throw err;
+                  else res.json({ token });
+              }
+          );
+      } catch (err) {
+          console.error(err.message)
+      }
+  },
+]);
 
 app.get('/api/printSomething', async (req, res) => {
 
@@ -168,8 +292,8 @@ app.post('/createOrder',async(req,res)=>{
       orderId : req.body.orderId,
       drugId : req.body.drugId,
       quantity : req.body.quantity,
-      currentOwner : req.body.currentOwner,
-      status: req.body.status
+      currentOwner : "M",//req.body.currentOwner,
+      status: "in transit" //req.body.status
     }
     console.log("Order Data : ",orderData);
 
