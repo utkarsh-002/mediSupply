@@ -8,7 +8,7 @@ const DrugCreate = () => {
     return (
         <Fragment>
             <div className="card-6">
-            <span style={{display : "inline" }}><Link to="/"> <i className="fa fa-arrow-left"></i></Link>  </span>    
+            <span ><Link to="/"> <i className="fa fa-arrow-left"></i></Link>  </span>    
             <h1 className='large '>Enter Drug Details</h1>
             <form className='form' >
                 <div className='form-group'>

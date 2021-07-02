@@ -1,14 +1,34 @@
-import React from "react";
-// import "./Login.css"
-import { Link } from "react-router-dom";
+import React ,{useState} from "react";
+import { connect } from "react-redux";
+import { login } from "../../actions/auth";
+import { Link ,Redirect} from "react-router-dom";
+import PropTypes from "prop-types";
 
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
+
+  const { email, password } = formData
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  const onSubmit = (e) => {
+    e.preventDefault()
+    console.log(formData);
+    login(email, password)
+  }
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />
+  }
+
   return (
     <section className="landing">
        <div className="dark-overlay">
          <div className="form-inner">
-         <form className="form card-5" >
+         <form className="form card-5" onSubmit={(e) => onSubmit(e)}>
       <h1 className="large">Welcome</h1>
       <p className="lead">
         <i className="fas fa-user-lock"></i> Sign into Your Account
@@ -20,6 +40,8 @@ const Login = () => {
             name="email"
             autoComplete="off"
             required
+            value={email}
+            onChange={(e) => onChange(e)}
           /> 
         </div>
         <div className="form-group">
@@ -27,6 +49,8 @@ const Login = () => {
             type="password"
             placeholder="Password"
             name="password"
+            value={password}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <input type="submit" className="btn btn-form" value="Login" />
@@ -37,4 +61,13 @@ const Login = () => {
   )
 }
 
-export default Login
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+}
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+})
+
+export default connect(mapStateToProps, { login })(Login)
