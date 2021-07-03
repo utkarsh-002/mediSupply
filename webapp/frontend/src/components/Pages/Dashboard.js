@@ -1,18 +1,33 @@
-import React, { Fragment } from "react"
-import { Link } from "react-router-dom"
-import DrugCreate from './../forms/DrugCreate';
+import React, { Fragment, useEffect } from 'react';
+import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
+import DashboardActions from "./DashboardActions"
+import { connect } from "react-redux";
 
 
-const Dashboard = () => {
-  
-  return (
-<>
-<div className="container-form">
-<DrugCreate/>
-</div>
-</>
-  )
+
+const Dashboard = ({ auth: { user }}) => {
+
+    return <Fragment>
+      <section className="container">
+      <h1 className='large text-primary'>Dashboard</h1>
+        <p className='lead'>
+            <i className='fas fa-user' /> Welcome {user && user.userName}
+        </p>
+        <br/>
+                <Fragment>
+                    <DashboardActions />
+                </Fragment>
+      </section> 
+    </Fragment>
 }
 
+Dashboard.propTypes = {
+    auth: PropTypes.object.isRequired,
+}
 
-export default Dashboard
+const mapStateToProps = state => ({
+    auth: state.auth,
+})
+
+export default connect(mapStateToProps,{})(Dashboard)

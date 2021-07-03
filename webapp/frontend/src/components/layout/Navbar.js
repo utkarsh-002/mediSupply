@@ -21,6 +21,11 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
+        <Link to="/register">
+          <i className="fas fa-user-circle" /> SignUp
+        </Link>
+      </li>
+      <li>
         <Link to="/login">
           <i className="fas fa-user-circle" /> SignIn
         </Link>

@@ -1,88 +1,115 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {createDrug} from "./../../actions/drug"
 
 
-const DrugCreate = () => {
-  
+const DrugCreate = ({ createDrug ,history})  => {
+    const [formData, setFormData] = useState({
+      drugId : " ",
+      drugName : " ",
+      drugManufacturer : "",
+      manDate : "",
+      expiryDate : "",
+      batchId : ""  
+    });
+    
+    const {
+     drugId,
+     drugManufacturer,
+     drugName,
+     manDate,
+     expiryDate,
+     batchId
+    } = formData;
+
+    const onChange = e =>
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onSubmit = e => {
+        e.preventDefault();
+        console.log(formData)
+        createDrug(formData,history)
+    };
+
 
     return (
         <Fragment>
+            <section className="container">
             <div className="card-6">
             <span ><Link to="/"> <i className="fa fa-arrow-left"></i></Link>  </span>    
             <h1 className='large '>Enter Drug Details</h1>
-            <form className='form' >
+            <form className='form' onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
                     <input 
                         type='text'
-                        placeholder='Drug ID'
+                        placeholder='Drug Id'
                         name='drugId'
-                        // onChange={e => onChange(e)}
+                        value ={drugId}
+                        onChange={e => onChange(e)}
                     />
-                 
                 </div>
                 <div className='form-group'>
                     <input
                         type='text'
                         placeholder='Drug Name'
                         name='drugName'
-                       
-                        // onChange={e => onChange(e)}
+                        value ={drugName}
+                        onChange={e => onChange(e)}
                     />
-                   
                 </div>
                 <div className='form-group'>
                     <input
                         type='text'
                         placeholder='Manufacturer'
-                        
                         name='drugManufacturer'
-                     
-                        // onChange={e => onChange(e)}
-                    />
-               
-                     
+                        value ={drugManufacturer}
+                        onChange={e => onChange(e)}
+                    />   
                 </div>
                 <div className='form-group'>
                     <input
                         type='text'
                         placeholder='Manufacturing Date'
                         name='manDate'
-                    
-                        // onChange={e => onChange(e)}
-                    />
-                 
-                       
+                        value ={manDate}
+                        onChange={e => onChange(e)}
+                    />           
                 </div>
                 <div className='form-group'>
                     <input
                         type='text'
                         placeholder='Expiry Date'
                         name='expiryDate'
-                    
-                        // onChange={e => onChange(e)}
-                    />
-                 
-                       
+                        value ={expiryDate}
+                        onChange={e => onChange(e)}
+                    />      
                 </div>
                 <div className='form-group'>
                     <input
                         type='text'
                         placeholder='Batch ID'
                         name='batchId'
-                        // onChange={e => onChange(e)}
-                    />
-                
+                        value ={batchId}
+                        onChange={e => onChange(e)}
+                    />  
                 </div>
-
                 <input type='submit' className='btn btn-form my-1' value="Submit"/>
             </form>
-
             </div>
-            
+            </section>
         </Fragment>
     );
 };
 
 
 
-export default DrugCreate;
+DrugCreate.propTypes = {
+    createDrug: PropTypes.func.isRequired
+};
+
+
+
+export default connect(null, { createDrug })(
+    withRouter(DrugCreate)
+);

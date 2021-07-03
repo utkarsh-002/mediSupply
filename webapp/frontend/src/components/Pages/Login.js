@@ -5,7 +5,7 @@ import { Link ,Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, auth}) => {
 
   const [formData, setFormData] = useState({
     email: "",
@@ -20,7 +20,7 @@ const Login = ({ login, isAuthenticated }) => {
     console.log(formData);
     login(email, password)
   }
-  if (isAuthenticated) {
+  if (auth.user) {
     return <Redirect to="/dashboard" />
   }
 
@@ -62,12 +62,11 @@ const Login = ({ login, isAuthenticated }) => {
 }
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
 })
 
 export default connect(mapStateToProps, { login })(Login)

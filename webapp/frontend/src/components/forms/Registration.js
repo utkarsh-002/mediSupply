@@ -1,21 +1,56 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
+import { setAlert } from "../../actions/alert"
+import { register } from "../../actions/auth"
+import { connect } from "react-redux"
+import PropTypes from "prop-types"
 
 
-const Registration = () => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
+
+    const [formData, setFormData] = useState({
+        userName : "",
+        email : "",
+        password : "",
+        contact : "",
+        license_number : "",
+        address :"",
+        role : ""
+        
+      })
+    
+      const {userName, email, password, contact,license_number,address,role} = formData
+      const onChange = (e) =>
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+      
+        const onSubmit = (e) => {
+        e.preventDefault()
+             console.log(formData);
+          register({userName,email,password,contact,license_number,address,role});
+        
+      }
+    
+      if (isAuthenticated) {
+        return <Redirect to="/dashboard" />
+      }
+    
+
+
   
     return (
         <Fragment>
+            <section className="container">
             <div className="card-6">
             <span style={{display : "inline" }}><Link to="/"> <i className="fa fa-arrow-left"></i></Link>  </span>    
             <h1 className='large '>User Registration</h1>
-            <form className='form' >
+            <form className='form' onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
                     <input 
                         type='text'
                         placeholder='User Name'
                         name='userName'
-                        // onChange={e => onChange(e)}
+                        value ={userName}
+                        onChange={e => onChange(e)}
                     />
                  
                 </div>
@@ -24,8 +59,8 @@ const Registration = () => {
                         type='text'
                         placeholder='Email'
                         name='email'
-                       
-                        // onChange={e => onChange(e)}
+                        value ={email}
+                        onChange={e => onChange(e)}
                     />
                    
                 </div>
@@ -34,13 +69,13 @@ const Registration = () => {
                         type='password'
                         placeholder='Password'
                         name='password'
-                       
-                        // onChange={e => onChange(e)}
+                        value ={password}
+                        onChange={e => onChange(e)}
                     />
                    
                 </div>
                 <div  className='form-group'>
-                    <select  name='role' style={{textAlign:'center'}}>
+                    <select  name='role' value={role} onChange={e => onChange(e)}>
                         <option value='0'>Select Role</option>
                         <option value='man'>Manufacturer</option>
                         <option value='dist'>Distributor</option>
@@ -53,8 +88,8 @@ const Registration = () => {
                         type='text'
                         placeholder='License Number'
                         name='license_number'
-                    
-                        // onChange={e => onChange(e)}
+                        value ={license_number}
+                        onChange={e => onChange(e)}
                     />
                  
                        
@@ -64,8 +99,8 @@ const Registration = () => {
                         type='text'
                         placeholder='Address'
                         name='address'
-                    
-                        // onChange={e => onChange(e)}
+                        value ={address}
+                        onChange={e => onChange(e)}
                     />
                  
                        
@@ -75,7 +110,8 @@ const Registration = () => {
                         type='text'
                         placeholder='Contact Number'
                         name='contact'
-                        // onChange={e => onChange(e)}
+                        value ={contact}
+                        onChange={e => onChange(e)}
                     />
                 
                 </div>
@@ -84,11 +120,21 @@ const Registration = () => {
             </form>
 
             </div>
-            
+            </section>
         </Fragment>
     );
 };
 
 
 
-export default Registration;
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
+  }
+  
+  const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+  })
+  
+  export default connect(mapStateToProps, { setAlert, register })(Register)

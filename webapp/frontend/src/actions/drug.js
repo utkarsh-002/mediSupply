@@ -1,0 +1,93 @@
+import axios from "axios";
+import { setAlert } from "./alert"
+import { CREATE_DRUG, DRUG_ERROR } from "./types"
+
+
+
+
+// // Get Drug by ID
+// export const getProfileById = userId => async dispatch => {
+//     try {
+//         const res = await axios.get(`http://localhost:5000/api/profile/user/${userId}`);
+
+//         dispatch({
+//             type: GET_PROFILE,
+//             payload: res.data
+//         });
+//     } catch (err) {
+//         dispatch({
+//             type: PROFILE_ERROR,
+//             payload: { msg: err.response.statusText, status: err.response.status }
+//         });
+//     }
+// };
+
+
+
+
+
+// Create or update profile
+export const createDrug = (
+    formData,
+    history
+) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const res = await axios.post('http://localhost:5000/createDrug', formData, config);
+        console.log(res.data)
+        dispatch({
+            type: CREATE_DRUG,
+            payload: res.data
+        });
+
+        dispatch(setAlert('Drug Created', 'success'));
+        history.push('/dashboard');
+
+    } catch (err) {
+        const errors = err.response.data.errors;
+
+        if (errors) {
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+        }
+
+        dispatch({
+            type: DRUG_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
+
+
+
+
+
+
+// // Delete a drug 
+// export const deleteAccount = id => async dispatch => {
+//     if (window.confirm('Are you sure this cannot be undone?')) {
+//         try {
+//             const res = await axios.delete('http://localhost:5000/api/profile/')
+//             dispatch({
+//                 type: CLEAR_PROFILE,
+//             })
+//             dispatch({
+//                 type: DELETE_ACCOUNT,
+//             })
+//             dispatch(setAlert('Account has been deleted Permanently', 'success'));
+//         }
+//         catch (err) {
+//             dispatch({
+//                 type: PROFILE_ERROR,
+//                 payload: { msg: err.response.statusText, status: err.response.status }
+//             });
+//         }
+
+//     }
+
+// }
