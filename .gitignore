@@ -1,5 +1,5 @@
-webapp/backend/node_modules/
-webapp/backend/wallet/
-webapp/backend/config.json
-webapp/backend/LocalFabricOrg1GatewayConnection.json
+./webapp/backend/node_modules/
+./webapp/backend/wallet/
+./webapp/backend/config.json
+./webapp/backend/LocalFabricOrg1GatewayConnection.json
  
