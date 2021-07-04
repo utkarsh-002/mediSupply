@@ -15,6 +15,8 @@ const DashboardActions = () => {
                 <i className="fas fa-plus text-primary"></i>Add Order</Link>
             <Link to="/readOrder" className="btn btn-light">
                 <i className="fas fa-folder-open text-primary"></i>Read Order</Link>
+            <Link to="/verify" className="btn btn-light">
+                <i className="fas fa-qrcode text-primary"></i>Verify</Link>
         </div>
     )
 }

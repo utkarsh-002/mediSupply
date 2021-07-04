@@ -30,7 +30,6 @@ const ReadDrug = ({readDrug ,clearDrug, drug}) => {
       clearDrug();
   }
 
-
   return (
     <section className="landing">
        <div className="dark-overlay">

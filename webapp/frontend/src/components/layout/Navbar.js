@@ -25,7 +25,7 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <Link to="/about">About</Link>
+        <Link to="/about"><i className="fas fa-info-circle" /> About</Link>
       </li>
       <li>
         <Link to="/register">
