@@ -7,8 +7,8 @@ import {createDrug} from "./../../actions/drug"
 
 const DrugCreate = ({ createDrug ,history})  => {
     const [formData, setFormData] = useState({
-      drugId : " ",
-      drugName : " ",
+      drugId : "",
+      drugName : "",
       drugManufacturer : "",
       manDate : "",
       expiryDate : "",

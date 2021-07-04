@@ -7,8 +7,8 @@ import {updateDrug} from "./../../actions/drug"
 
 const DrugUpdate = ({ updateDrug ,history})  => {
     const [formData, setFormData] = useState({
-      drugId : " ",
-      drugName : " ",
+      drugId : "",
+      drugName : "",
       drugManufacturer : "",
       manDate : "",
       expiryDate : "",
