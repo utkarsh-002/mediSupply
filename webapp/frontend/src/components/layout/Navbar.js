@@ -44,7 +44,7 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
     <nav className="navbar bg-dark">
       <h1>
         <Link to={!user ? "/" : "/dashboard"}>
-          <i className="fa fa-calendar" aria-hidden="true" /> MedScan
+          <i className="fa fa-medkit" aria-hidden="true" /> MedScan
         </Link>
       </h1>
       { !loading && (

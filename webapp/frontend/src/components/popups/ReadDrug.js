@@ -35,7 +35,7 @@ const ReadDrug = ({readDrug}) => {
          <form className="form card-5" onSubmit={(e) => onSubmit(e)}>
       <h3 className="large">Drug Info</h3>
       <p className="lead">
-        <i className="fas "></i> Enter Drug Id 
+        <i className="fas fa-edit"></i> Enter Drug Id 
       </p>
         <div className="form-group">
           <input
