@@ -9,6 +9,7 @@ import Register from './components/forms/Registration';
 import Alert from './components/layout/Alert'; 
 import DrugCreate from "./components/forms/DrugCreate"; 
 import DrugUpdate from "./components/forms/DrugUpdation";
+import ReadDrug from './components/popups/ReadDrug';
 import setAuthToken from "./utils/setAuthToken";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -38,6 +39,7 @@ useEffect(() => {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/addDrug" component={DrugCreate} />
               <PrivateRoute exact path="/editDrug" component={DrugUpdate} />
+              <PrivateRoute exact path="/readDrug" component={ReadDrug} />
             </Switch>
  </Router>
   </Provider>

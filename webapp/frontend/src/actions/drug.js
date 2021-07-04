@@ -1,26 +1,26 @@
 import axios from "axios";
 import { setAlert } from "./alert"
-import { CREATE_DRUG, DRUG_ERROR ,UPDATE_DRUG} from "./types"
+import { CREATE_DRUG, DRUG_ERROR ,UPDATE_DRUG , GET_DRUG} from "./types"
 
 
 
 
-// // Get Drug by ID
-// export const getProfileById = userId => async dispatch => {
-//     try {
-//         const res = await axios.get(`http://localhost:5000/api/profile/user/${userId}`);
-
-//         dispatch({
-//             type: GET_PROFILE,
-//             payload: res.data
-//         });
-//     } catch (err) {
-//         dispatch({
-//             type: PROFILE_ERROR,
-//             payload: { msg: err.response.statusText, status: err.response.status }
-//         });
-//     }
-// };
+// Get Drug by ID
+export const readDrug = drugId => async dispatch => {
+    try {
+        const res = await axios.get(`http://localhost:5000/readDrug?drugId=${drugId}`);
+        console.log(res.data);
+        dispatch({
+            type: GET_DRUG,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({
+            type: DRUG_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
 
 
 
