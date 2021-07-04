@@ -5,7 +5,7 @@ import {verify} from '../../actions/verify'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const QRscanner=({verify,user}) => {
+const QRscanner=({verify,user,history}) => {
 
     const [qrscan, setQrscan] = useState("");
     const handleScan = data => {
@@ -20,7 +20,7 @@ const QRscanner=({verify,user}) => {
     const onClick = e => {
         if(qrscan!=""){
             console.log("Verified Clicked");
-            verify(user.role, qrscan);
+            verify(user.role, qrscan,history);
         }
     }
 

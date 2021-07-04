@@ -1,7 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link ,Redirect} from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import Footer from "../layout/Footer"
 
-const Landing = () => {
+
+
+const Landing = ({user}) => {
+  if (user) {
+    return <Redirect to="/dashboard" />
+  }
   return (
     <section className="landing">
       <div className="dark-overlay">
@@ -15,8 +23,17 @@ const Landing = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </section>
   )
 }
 
-export default Landing
+Landing.propTypes = {
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  user: state.auth.user
+})
+
+export default connect(mapStateToProps)(Landing);

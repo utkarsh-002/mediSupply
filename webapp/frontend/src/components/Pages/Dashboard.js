@@ -16,7 +16,7 @@ const Dashboard = ({ auth: { user }}) => {
         </p>
         <br/>
                 <Fragment>
-                    <DashboardActions />
+                    <DashboardActions  role={user.role}/>
                 </Fragment>
       </section> 
     </Fragment>
