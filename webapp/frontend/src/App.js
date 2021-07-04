@@ -15,6 +15,8 @@ import { Provider } from "react-redux";
 import store from "./store";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import { loadUser } from "./actions/auth";
+import OrderCreate from "./components/forms/OrderCreate"; 
+import ReadOrder from './components/popups/ReadOrder';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -40,6 +42,8 @@ useEffect(() => {
               <PrivateRoute exact path="/addDrug" component={DrugCreate} />
               <PrivateRoute exact path="/editDrug" component={DrugUpdate} />
               <PrivateRoute exact path="/readDrug" component={ReadDrug} />
+              <PrivateRoute exact path="/addOrder" component={OrderCreate} />
+              <PrivateRoute exact path="/readOrder" component={ReadOrder} />
             </Switch>
  </Router>
   </Provider>

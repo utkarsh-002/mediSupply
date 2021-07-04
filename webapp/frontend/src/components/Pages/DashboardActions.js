@@ -11,6 +11,10 @@ const DashboardActions = () => {
                 <i className="fab fa-edit text-primary"></i>Edit Drug</Link>
             <Link to="/readDrug" className="btn btn-light">
                 <i className="fab fa-black-tie text-primary"></i>Read Drug</Link>
+            <Link to="/addOrder" className="btn btn-light">
+                <i className="fab fa-black-tie text-primary"></i>Add Order</Link>
+            <Link to="/readOrder" className="btn btn-light">
+                <i className="fab fa-black-tie text-primary"></i>Read Order</Link>
         </div>
     )
 }
