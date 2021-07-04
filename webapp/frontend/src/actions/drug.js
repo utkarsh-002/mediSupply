@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert"
-import { CREATE_DRUG, DRUG_ERROR } from "./types"
+import { CREATE_DRUG, DRUG_ERROR ,UPDATE_DRUG} from "./types"
 
 
 
@@ -61,6 +61,44 @@ export const createDrug = (
         });
     }
 };
+
+
+// Create or update profile
+export const updateDrug = (
+    formData,
+    history
+) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const res = await axios.post('http://localhost:5000/updateDrug', formData, config);
+        console.log(res.data)
+        dispatch({
+            type: UPDATE_DRUG,
+            payload: res.data
+        });
+
+        dispatch(setAlert('Drug Updated', 'success'));
+        history.push('/dashboard');
+
+    } catch (err) {
+        const errors = err.response.data.errors;
+
+        if (errors) {
+            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+        }
+
+        dispatch({
+            type: DRUG_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+};
+
 
 
 
