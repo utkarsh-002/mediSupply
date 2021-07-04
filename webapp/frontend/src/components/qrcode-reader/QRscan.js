@@ -1,56 +1,13 @@
-// import React, {useState} from 'react'
-// import { Link } from "react-router-dom";
-// import QrScan from 'react-qr-reader'
-
-// function QRscanner() {
-
-//     const [qrscan, setQrscan] = useState('No result');
-
-//     const handleScan = data => {
-//         if (data) {
-//             console.log(data)
-//             setQrscan(data)
-//         }
-//     }
-//     const handleError = err => {
-//     console.error(err)
-//     }
-
-//     return (
-//         <div>
-//              <section className="container">
-//           <Link to="/dashboard">
-//                 <i className="fa fa-arrow-left"></i>
-//             </Link>
-//             <span><h3 className="large" >QR Scanner</h3></span>
-//             <center>
-//             <div >
-//                 <QrScan
-//                     delay={300}
-//                     onError={handleError}
-//                     onScan={handleScan}
-//                     style={{ height: 500, width: 320 }}
-//                 />
-//             </div>
-//             <div>
-//             <p value={qrscan}> </p>
-//             </div>
-//             </center>
-//           </section>   
-//         </div>
-         
-//     );
-//   }
-  
-//   export default QRscanner;
-
 import React, {useState} from 'react'
 import { Link } from "react-router-dom";
 import QrScan from 'react-qr-reader'
+import {verify} from '../../actions/verify'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-function QRscanner() {
+const QRscanner=({verify,user}) => {
 
-    const [qrscan, setQrscan] = useState('No result');
+    const [qrscan, setQrscan] = useState("");
     const handleScan = data => {
         if (data) {
             console.log(data)
@@ -60,29 +17,46 @@ function QRscanner() {
     const handleError = err => {
     console.error(err)
     }
+    const onClick = e => {
+        if(qrscan!=""){
+            console.log("Verified Clicked");
+            verify(user.role, qrscan);
+        }
+    }
 
     return (
-          <section className="container">
-          <Link to="/dashboard">
-                <i className="fa fa-arrow-left"></i>
-            </Link>
-            <span><h3 className="large" >QR Scanner</h3></span>
+        <section className="landing">
+        <div className="dark-overlay">
+        <div className="landing-inner">
+            <section className="card-7">
+            <h3 className="large" >QR Scanner</h3>
             <center>
             <div >
                 <QrScan
                     delay={300}
                     onError={handleError}
                     onScan={handleScan}
-                    style={{ height: 500, width: 320 }}
+                    style={{ height: 600, width: 500 }}
                 />
             </div>
             <div>
             <p value={qrscan}></p>
             </div>
             </center>
-          </section>   
+            {qrscan!=""? <button className="btn btn-form" onClick={ (e) => onClick(e)}> verify</button>:<p className="lead">Waiting to Scan....</p>}
+            </section>
+        </div></div>
+        </section>   
     );
   }
   
-  export default QRscanner;
+  QRscanner.propTypes = {
+    user: PropTypes.object.isRequired,
+  }
+  
+  const mapStateToProps = (state) => ({
+    user: state.auth.user,
+  })
+  
+  export default connect(mapStateToProps, { verify })(QRscanner)
   

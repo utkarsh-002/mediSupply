@@ -300,7 +300,7 @@ app.post('/createOrder',async(req,res)=>{
 
     var bytes = utf8.encode(orderData.orderId);
     var encoded = base64.encode(bytes);
-    var link = `http://localhost:5000/verify?orderID=${encoded}`;
+    var link = `http://localhost:5000/verify?orderId=${encoded}`;
 
 
     let networkObj = await network.connectToNetwork(appAdmin);
@@ -417,13 +417,14 @@ app.get('/verifyAsConsumer', async (req, res) => {
 app.get("/verify", async(req,res) =>{
   try{
         var orderId = req.query.orderId;
-        console.log(orderId);
-        if(user === "consumer"){
-          res.redirect(`/verifyAsConsumer?orderId=${orderId}`);
-        }else if(user === "retailer"){
+        var role = req.query.role;
+        console.log(orderId,role);
+        if(role == "dist"){
+          res.redirect(`/verifyAsDistributor?orderId=${orderId}`);
+        }else if(role == "ret"){
           res.redirect(`/verifyAsRetailer?orderId=${orderId}`);
         }else{
-          res.redirect(`/verifyAsDistributor?orderId=${orderId}`);
+          res.redirect(`/verifyAsConsumer?orderId=${orderId}`);
         }
   }catch(err){
     console.error(err.response.data);
@@ -443,7 +444,7 @@ app.listen(process.env.PORT || 5000, () => {
 
 const generateQR = async (link,encoded) => {
   try {
-    var filename = `./${encoded}.png`
+    var filename = `qr-codes/${encoded}.png`
     await QRCode.toFile(filename, link);
   } catch (err) {
     console.error(err)
