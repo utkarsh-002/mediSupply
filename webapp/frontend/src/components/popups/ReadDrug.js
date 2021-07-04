@@ -1,12 +1,12 @@
-import React ,{useState} from "react";
+import React ,{Fragment, useState} from "react";
 import { connect } from "react-redux";
 import { Link ,Redirect,withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {readDrug} from "./../../actions/drug";
+import {clearDrug, readDrug} from "./../../actions/drug";
 
 
 
-const ReadDrug = ({readDrug}) => {
+const ReadDrug = ({readDrug ,clearDrug, drug}) => {
 
   const [formData, setFormData] = useState({
     drugId : ""  
@@ -26,16 +26,29 @@ const ReadDrug = ({readDrug}) => {
       readDrug(drugId)
   };
 
+  const onClick = e => {
+      clearDrug();
+  }
 
 
   return (
     <section className="landing">
        <div className="dark-overlay">
          <div className="form-inner">
-         <form className="form card-5" onSubmit={(e) => onSubmit(e)}>
+         {!drug.loading   ? 
+         <Fragment> <div className="card-6">
+           <h4 className="large"> Drug Details</h4> 
+           <p className="text-inner">Name :  {drug.drug.drugName}</p>
+           <p className="text-inner">Manufacturer :  {drug.drug.manufacturer}</p>
+           <p className="text-inner">Manufactured Date :  {drug.drug.mfdDate}</p>
+           <p className="text-inner">Expiry Date :  {drug.drug.expiryDate}</p>
+           <p className="text-inner">Batch ID :  {drug.drug.batchId}</p>
+           <button className="btn btn-form" onClick={ (e) => onClick(e)} >Go Again</button>
+           </div></Fragment> : 
+      <form className="form card-5" onSubmit={(e) => onSubmit(e)}>
       <h3 className="large">Drug Info</h3>
       <p className="lead">
-        <i className="fas fa-edit"></i> Enter Drug Id 
+        <i className="fas fa-book-medical"></i> Enter Drug Id 
       </p>
         <div className="form-group">
           <input
@@ -49,7 +62,7 @@ const ReadDrug = ({readDrug}) => {
           /> 
         </div>
         <input type="submit" className="btn btn-form" value="Submit" />
-      </form>
+      </form>}  
          </div>
         </div>
     </section>
@@ -59,11 +72,18 @@ const ReadDrug = ({readDrug}) => {
 
 
 ReadDrug.propTypes = {
-  readDrug: PropTypes.func.isRequired
+  readDrug: PropTypes.func.isRequired,
+  clearDrug: PropTypes.func.isRequired,
+  drug :  PropTypes.object.isRequired
 };
 
+const mapStateToProps = (state) => ({
+  drug: state.drug
+})
 
 
-export default connect(null, { readDrug })(
+
+
+export default connect(mapStateToProps, { readDrug , clearDrug })(
   withRouter(ReadDrug)
 );

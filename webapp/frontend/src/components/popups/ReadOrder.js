@@ -1,12 +1,12 @@
-import React ,{useState} from "react";
+import React ,{useState, Fragment} from "react";
 import { connect } from "react-redux";
 import { Link ,Redirect,withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {readOrder} from "./../../actions/order";
+import {readOrder , clearOrder} from "./../../actions/order";
 
 
 
-const ReadOrder = ({readOrder}) => {
+const ReadOrder = ({readOrder , clearOrder , order}) => {
 
   const [formData, setFormData] = useState({
     orderId : ""  
@@ -26,16 +26,28 @@ const ReadOrder = ({readOrder}) => {
       readOrder(orderId)
   };
 
-
+  const onClick = e => {
+    clearOrder();
+}
 
   return (
     <section className="landing">
        <div className="dark-overlay">
          <div className="form-inner">
+         { !order.loading   ? 
+         <Fragment> <div className="card-6">
+           <h4 className="large"> Order Details</h4> 
+           <p className="text-inner">Drug Id :  {order.order.drugId}</p>
+           <p className="text-inner">Drug Name :  {order.order.drugName}</p>
+           <p className="text-inner">Quantity :  {order.order.quantity}</p>
+           <p className="text-inner">Current Owner :  {order.order.currentOwner}</p>
+           <p className="text-inner">Status :  {order.order.status}</p>
+           <button className="btn btn-form" onClick={ (e) => onClick(e)} >Go Again</button>
+           </div></Fragment> :  
          <form className="form card-5" onSubmit={(e) => onSubmit(e)}>
       <h3 className="large">Order Info</h3>
       <p className="lead">
-        <i className="fas "></i> Enter Order Id 
+        <i className="fas fa-folder-open"></i> Enter Order Id 
       </p>
         <div className="form-group">
           <input
@@ -49,9 +61,9 @@ const ReadOrder = ({readOrder}) => {
           /> 
         </div>
         <input type="submit" className="btn btn-form" value="Submit" />
-      </form>
-         </div>
-        </div>
+      </form>}
+  </div> 
+  </div>
     </section>
   )
 }
@@ -59,11 +71,17 @@ const ReadOrder = ({readOrder}) => {
 
 
 ReadOrder.propTypes = {
-  readOrder: PropTypes.func.isRequired
+  readOrder: PropTypes.func.isRequired,
+  clearOrder : PropTypes.func.isRequired,
+  order : PropTypes.object.isRequired
 };
 
+const mapStateToProps = (state) => ({
+  order: state.order
+})
 
 
-export default connect(null, { readOrder })(
+
+export default connect(mapStateToProps, { readOrder , clearOrder })(
   withRouter(ReadOrder)
 );
