@@ -40,8 +40,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     return (
         <Fragment>
             <section className="container">
-            <div className="card-6">
-            <span style={{display : "inline" }}><Link to="/"> <i className="fa fa-arrow-left"></i></Link>  </span>    
+            <div className="card-6">  
             <h1 className='large '>User Registration</h1>
             <form className='form' onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
