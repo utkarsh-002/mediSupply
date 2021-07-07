@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert"
-import { CREATE_DRUG, DRUG_ERROR ,UPDATE_DRUG , GET_DRUG , CLEAR_DRUG} from "./types"
+import { CREATE_DRUG, DRUG_ERROR ,UPDATE_DRUG , GET_DRUG , CLEAR_DRUG, ALL_DRUG} from "./types"
 
 
 
@@ -115,11 +115,26 @@ export const updateDrug = (
     }
 };
 
+export const getAllDrug = () => async dispatch => {
+    try {
+        dispatch({ type: CLEAR_DRUG })
+        const res = await axios.get("http://localhost:5000/allDrug/");
+        console.log(res.data)
+        dispatch({
+            type: ALL_DRUG,
+            payload: res.data
+        })
+    } catch (err) {
+        dispatch({
+            type: DRUG_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
 
-
-
-
-
+        })
+    }
+}
 
 
 // // Delete a drug 

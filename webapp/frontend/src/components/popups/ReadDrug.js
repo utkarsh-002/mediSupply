@@ -34,7 +34,7 @@ const ReadDrug = ({readDrug ,clearDrug, drug}) => {
     <section className="landing">
        <div className="dark-overlay">
          <div className="form-inner">
-         {!drug.loading   ? 
+         {drug.drug   ? 
          <Fragment> <div className="card-6">
            <h4 className="large"> Drug Details</h4> 
            <p className="text-inner">Name :  {drug.drug.drugName}</p>

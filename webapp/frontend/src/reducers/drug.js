@@ -1,7 +1,8 @@
-import { DRUG_ERROR, CLEAR_DRUG, GET_DRUG } from "../actions/types"
+import { DRUG_ERROR, CLEAR_DRUG, GET_DRUG, ALL_DRUG } from "../actions/types"
 
 const initialState = {
   drug: null,
+  drugs : [],
   loading: true,
   error: {},
 }
@@ -20,6 +21,12 @@ export default function (state = initialState, action) {
         ...state,
         error: payload,
         loading: false,
+      }
+    case ALL_DRUG:
+      return {
+        ...state,
+        drugs: payload,
+        loading:false
       }
     case CLEAR_DRUG:
       return {

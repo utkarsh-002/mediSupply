@@ -12,7 +12,8 @@ const DrugUpdate = ({ updateDrug ,history})  => {
       drugManufacturer : "",
       manDate : "",
       expiryDate : "",
-      batchId : ""  
+      batchId : "",
+      cost : ""  
     });
     
     const {
@@ -21,7 +22,8 @@ const DrugUpdate = ({ updateDrug ,history})  => {
      drugName,
      manDate,
      expiryDate,
-     batchId
+     batchId,
+     cost
     } = formData;
 
     const onChange = e =>
@@ -91,6 +93,15 @@ const DrugUpdate = ({ updateDrug ,history})  => {
                         placeholder='Batch ID'
                         name='batchId'
                         value ={batchId}
+                        onChange={e => onChange(e)}
+                    />  
+                </div>
+                <div className='form-group'>
+                    <input
+                        type='text'
+                        placeholder='Cost'
+                        name='cost'
+                        value ={cost}
                         onChange={e => onChange(e)}
                     />  
                 </div>

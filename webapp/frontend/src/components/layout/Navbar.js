@@ -15,6 +15,12 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
         </Link>
       </li>
       <li>
+        <Link  to="/allDrug">
+          <i className="fas fa-capsule"></i>{" "}
+          <span className="hide-sm">Available Drugs</span>
+        </Link>
+      </li>
+      <li>
         <a onClick={logout} href="/">
           <i className="fas fa-sign-out-alt"></i>{" "}
           <span className="hide-sm">Logout</span>
