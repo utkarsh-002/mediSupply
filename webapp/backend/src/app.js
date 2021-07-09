@@ -31,6 +31,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth")
 const User = require("../models/user")
+const Drug = require("../models/drug") 
 const { check, validationResult } = require("express-validator");
 const conf = require("config");
 
@@ -206,6 +207,14 @@ app.delete('/deleteDrug', async (req, res) => {
   try{
     let drugId = req.query.drugId;
     console.log("drug id : ", drugId)
+
+    let d = await Drug.findOne({ drugId });
+    Drug.deleteOne({drugId}, function(err){
+      if(err){
+        let error = "No drug of the given id is present or there has been some error in deleting the drug, try again"
+        throw error
+      }
+    })
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'deleteDrug', drugId);
     response = response.toString();
@@ -226,9 +235,16 @@ app.post('/updateDrug',async(req,res)=>{
       drugManufacturer: req.body.drugManufacturer, 
       manDate: req.body.manDate, 
       expiryDate: req.body.expiryDate, 
-      batchId: req.body.batchId
+      batchId: req.body.batchId,
+      cost :req.body.cost
     };
-    
+    const d = await Drug.findOne({
+      drugId : req.body.drugId
+    })
+    await d.updateOne({
+      man : req.body.drugManufacturer,
+      name : req.body.drugName
+    });
     console.log(newDrugData);
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'updateDrug',newDrugData);
@@ -239,8 +255,7 @@ app.post('/updateDrug',async(req,res)=>{
 
   }catch(err){
     console.error(err.response.data);
-    res.status(500).send("Server Error");
-    
+    res.status(500).send("Server Error"); 
   }
 })
 
@@ -255,9 +270,21 @@ app.post('/createDrug',async(req,res)=>{
       drugManufacturer : req.body.drugManufacturer,
       manDate : req.body.manDate,
       expiryDate : req.body.expiryDate,
-      batchId : req.body.batchId
+      batchId : req.body.batchId,
+      cost :req.body.cost
     }
     console.log(drugData);
+    const man = req.body.drugManufacturer
+    const drugId = req.body.drugId
+    const name = req.body.drugName
+    const d_id = new Drug({
+      man,
+      drugId,
+      name
+    });
+    console.log("drug Id saved : ",d_id)
+    await d_id.save();
+
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createDrug',drugData);
     console.log(response);
@@ -432,6 +459,15 @@ app.get("/verify", async(req,res) =>{
   }
 })
 
+app.get("/allDrug",async(req,res)=>{
+  try{
+    const d = await Drug.find()
+    res.json(d);
+  }
+  catch(err){
+    res.status(500).send("Drugs not able retrived")
+  }
+})
 
 
 

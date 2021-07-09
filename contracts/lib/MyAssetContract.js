@@ -30,7 +30,8 @@ class MyAssetContract extends Contract {
             manufacturer : drugData.drugManufacturer , 
             mfdDate : drugData.manDate, 
             expiryDate : drugData.expiryDate, 
-            batchId : drugData.batchId
+            batchId : drugData.batchId,
+            cost : drugData.cost
         };
 
         const buffer = Buffer.from(JSON.stringify(asset));
@@ -60,7 +61,8 @@ class MyAssetContract extends Contract {
             manufacturer : newDrugData.drugManufacturer , 
             mfdDate : newDrugData.manDate, 
             expiryDate : newDrugData.expiryDate, 
-            batchId : newDrugData.batchId
+            batchId : newDrugData.batchId,
+            cost : newDrugData.cost
         };
             
         const buffer = Buffer.from(JSON.stringify(asset));
