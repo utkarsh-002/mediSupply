@@ -30,9 +30,9 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
   )
   const guestLinks = (
     <ul>
-      <li>
+      {/* <li>
         <Link to="/about"><i className="fas fa-info-circle" /> About</Link>
-      </li>
+      </li> */}
       <li>
         <Link to="/register">
           <i className="fas fa-user-plus" /> Register

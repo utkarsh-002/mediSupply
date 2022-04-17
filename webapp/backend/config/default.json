@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb://Manu123:Manu123@cluster0-shard-00-00.uca29.mongodb.net:27017,cluster0-shard-00-01.uca29.mongodb.net:27017,cluster0-shard-00-02.uca29.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-b1bps2-shard-0&authSource=admin&retryWrites=true&w=majority",
+    "mongoURI": "mongodb+srv://Manu123:Manu123@cluster0.g0bay.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     "jwtSecret": "lm2n"
 }

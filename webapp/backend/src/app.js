@@ -176,7 +176,7 @@ app.get('/api/printSomething', async (req, res) => {
 app.get('/drugExists', async (req, res) => {
   try{
     let drugId = req.query.drugId;
-    console.log("drug id : ", drugId)
+    // console.log("drug id : ", drugId)
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, true, 'drugExists', drugId);
     response = response.toString();
@@ -191,7 +191,7 @@ app.get('/drugExists', async (req, res) => {
 app.get('/readDrug', async (req, res) => {
   try{
     let drugId = req.query.drugId;
-    console.log("drug id : ", drugId)
+    // console.log("drug id : ", drugId)
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, true, 'readDrug', drugId);
     response = response.toString();
@@ -206,7 +206,7 @@ app.get('/readDrug', async (req, res) => {
 app.delete('/deleteDrug', async (req, res) => {
   try{
     let drugId = req.query.drugId;
-    console.log("drug id : ", drugId)
+    // console.log("drug id : ", drugId)
 
     let d = await Drug.findOne({ drugId });
     Drug.deleteOne({drugId}, function(err){
@@ -245,12 +245,12 @@ app.post('/updateDrug',async(req,res)=>{
       man : req.body.drugManufacturer,
       name : req.body.drugName
     });
-    console.log(newDrugData);
+    // console.log(newDrugData);
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'updateDrug',newDrugData);
-    console.log(response);
+    // console.log(response);
     response = response.toString();
-    console.log(typeof(response));
+    // console.log(typeof(response));
     res.send(response);
 
   }catch(err){
@@ -273,7 +273,7 @@ app.post('/createDrug',async(req,res)=>{
       batchId : req.body.batchId,
       cost :req.body.cost
     }
-    console.log(drugData);
+    // console.log(drugData);
     const man = req.body.drugManufacturer
     const drugId = req.body.drugId
     const name = req.body.drugName
@@ -282,14 +282,14 @@ app.post('/createDrug',async(req,res)=>{
       drugId,
       name
     });
-    console.log("drug Id saved : ",d_id)
+    // console.log("drug Id saved : ",d_id)
     await d_id.save();
 
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createDrug',drugData);
-    console.log(response);
+    // console.log(response);
     response = response.toString();
-    console.log(typeof(response));
+    // console.log(typeof(response));
     res.send(response);
 
   }catch(err){
@@ -322,7 +322,7 @@ app.post('/createOrder',async(req,res)=>{
       currentOwner : "M",//req.body.currentOwner,
       status: "in transit" //req.body.status
     }
-    console.log("Order Data : ",orderData);
+    // console.log("Order Data : ",orderData);
 
 
     var bytes = utf8.encode(orderData.orderId);
@@ -332,9 +332,9 @@ app.post('/createOrder',async(req,res)=>{
 
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createOrder', orderData);
-    console.log(response);
+    // console.log(response);
     response = response.toString();
-    console.log(typeof(response));
+    // console.log(typeof(response));
     res.send(response);
     generateQR(link,encoded);
   }catch(err){
@@ -351,12 +351,12 @@ app.post('/updateOrder',async(req,res)=>{
       newStatus: req.body.newStatus
     }
     
-    console.log(newOrderData);
+    // console.log(newOrderData);
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'updateOrder',newOrderData);
-    console.log(response);
+    // console.log(response);
     response = response.toString();
-    console.log(typeof(response));
+    // console.log(typeof(response));
     res.send(response);
 
   }catch(err){
@@ -417,6 +417,18 @@ app.get('/verifyAsRetailer', async (req, res) => {
     var bytes = base64.decode(orderId);
     var decodedOrderId = utf8.decode(bytes);
     let networkObj = await network.connectToNetwork(appAdmin);
+    
+    //dict
+    
+    let orderId = req.query.orderId;
+    let networkObj = await network.connectToNetwork(appAdmin);
+    let response = await network.invoke(networkObj, true, 'readOrder', orderId);
+    
+
+    //extract drug id and qnt 
+    //increment qnt of that drug if present else add to dict
+
+    //verify as consumer me decrement that drug
     let response = await network.invoke(networkObj, false, 'verifyAsRetailer', decodedOrderId);
     response = response.toString();
     res.send(response);
@@ -445,7 +457,7 @@ app.get("/verify", async(req,res) =>{
   try{
         var orderId = req.query.orderId;
         var role = req.query.role;
-        console.log(orderId,role);
+        // console.log(orderId,role);
         if(role == "dist"){
           res.redirect(`/verifyAsDistributor?orderId=${orderId}`);
         }else if(role == "ret"){
