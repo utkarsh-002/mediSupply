@@ -420,9 +420,9 @@ app.get('/verifyAsRetailer', async (req, res) => {
     
     //dict
     
-    let orderId = req.query.orderId;
-    let networkObj = await network.connectToNetwork(appAdmin);
-    let response = await network.invoke(networkObj, true, 'readOrder', orderId);
+    // let orderId = req.query.orderId;
+    // let networkObj = await network.connectToNetwork(appAdmin);
+    // let response = await network.invoke(networkObj, true, 'readOrder', orderId);
     
 
     //extract drug id and qnt 
