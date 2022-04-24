@@ -282,11 +282,12 @@ app.post('/createDrug',async(req,res)=>{
       drugId,
       name
     });
-    // console.log("drug Id saved : ",d_id)
+    console.log("drug Id saved : ",d_id)
     await d_id.save();
 
     let networkObj = await network.connectToNetwork(appAdmin);
-    let response = await network.invoke(networkObj, false, 'createDrug',drugData);
+    console.log(networkObj);
+    let response = await network.invoke(networkObj, false, 'createDrug', drugData);
     // console.log(response);
     response = response.toString();
     // console.log(typeof(response));
@@ -295,7 +296,6 @@ app.post('/createDrug',async(req,res)=>{
   }catch(err){
     console.error(err.response.data);
     res.status(500).send("Server Error");
-    
   }
 })
 
@@ -322,7 +322,7 @@ app.post('/createOrder',async(req,res)=>{
       currentOwner : "M", //req.body.currentOwner,
       status: "in transit" //req.body.status
     }
-    
+
     // console.log("Order Data : ",orderData);
 
     var bytes = utf8.encode(orderData.orderId);
@@ -339,8 +339,9 @@ app.post('/createOrder',async(req,res)=>{
 
     // console.log(typeof(response));
 
-    res.send(response);
     generateQR(link,encoded);
+    res.send(response);
+
   }catch(err){
     console.error(err.response.data);
     res.status(500).send("Server Error");
