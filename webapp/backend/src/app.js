@@ -319,11 +319,11 @@ app.post('/createOrder',async(req,res)=>{
       orderId : req.body.orderId,
       drugId : req.body.drugId,
       quantity : req.body.quantity,
-      currentOwner : "M",//req.body.currentOwner,
+      currentOwner : "M", //req.body.currentOwner,
       status: "in transit" //req.body.status
     }
+    
     // console.log("Order Data : ",orderData);
-
 
     var bytes = utf8.encode(orderData.orderId);
     var encoded = base64.encode(bytes);
@@ -332,9 +332,13 @@ app.post('/createOrder',async(req,res)=>{
 
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createOrder', orderData);
+
     // console.log(response);
+
     response = response.toString();
+
     // console.log(typeof(response));
+
     res.send(response);
     generateQR(link,encoded);
   }catch(err){

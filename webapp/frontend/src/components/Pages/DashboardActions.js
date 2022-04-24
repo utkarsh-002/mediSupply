@@ -9,10 +9,13 @@ const DashboardActions = ({role}) => {
         <div className="dash-buttons">
             <Link to="/addDrug" className="btn btn-light">
                 <i className="fas fa-file-prescription text-primary"></i>Add Drug</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/editDrug" className="btn btn-light">
                 <i className="fas fa-edit text-primary"></i>Edit Drug</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/readDrug" className="btn btn-light">
-                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>    
+                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>  
+            <br></br>  <br></br>
             <Link to="/readOrder" className="btn btn-light">
                 <i className="fas fa-folder-open text-primary"></i>Read Order</Link>
         </div>
@@ -22,9 +25,11 @@ const DashboardActions = ({role}) => {
     const DistLinks = (
         <div>
             <Link to="/readDrug" className="btn btn-light">
-                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>    
+                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>  
+            &nbsp;&nbsp;&nbsp;&nbsp;  
             <Link to="/readOrder" className="btn btn-light">
                 <i className="fas fa-folder-open text-primary"></i>Read Order</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/verify" className="btn btn-light">
                 <i className="fas fa-qrcode text-primary"></i>Verify</Link>
         </div>
@@ -33,11 +38,14 @@ const DashboardActions = ({role}) => {
     const ReatailLinks = (
         <div className="dash-buttons">
             <Link to="/readDrug" className="btn btn-light">
-                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>    
+                <i className="fas fa-book-medical text-primary"></i>Read Drug</Link>  
+            &nbsp;&nbsp;&nbsp;&nbsp;  
             <Link to="/readOrder" className="btn btn-light">
                 <i className="fas fa-folder-open text-primary"></i>Read Order</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/addOrder" className="btn btn-light">
                 <i className="fas fa-plus text-primary"></i>Add Order</Link>
+            <br></br>  <br></br>
             <Link to="/verify" className="btn btn-light">
                 <i className="fas fa-qrcode text-primary"></i>Verify</Link>  
                 
