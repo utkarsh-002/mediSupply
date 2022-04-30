@@ -18,7 +18,9 @@ import { loadUser } from "./actions/auth";
 import OrderCreate from "./components/forms/OrderCreate"; 
 import ReadOrder from './components/popups/ReadOrder';
 import QRscanner from "./components/qrcode-reader/QRscan";
-import AllDrug from "./components/Pages/AllDrug"
+import AllDrug from "./components/Pages/AllDrug";
+import UploadImage from './components/forms/UploadImage';
+
 if (localStorage.token) {
   setAuthToken(localStorage.token)
 }
@@ -47,6 +49,7 @@ useEffect(() => {
               <PrivateRoute exact path="/readOrder" component={ReadOrder} />
               <PrivateRoute exact path="/verify" component={QRscanner} />
               <PrivateRoute exact path="/allDrug" component={AllDrug} />
+              <Route exact path="/uploadimage" component={UploadImage} />
             </Switch>
  </Router>
   </Provider>
