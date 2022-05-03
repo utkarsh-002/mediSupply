@@ -71,7 +71,7 @@ const DrugUpdate = ({ updateDrug ,history})  => {
                 </div>
                 <div className='form-group'>
                     <input
-                        type='text'
+                        type='date'
                         placeholder='Manufacturing Date'
                         name='manDate'
                         value ={manDate}
@@ -80,7 +80,7 @@ const DrugUpdate = ({ updateDrug ,history})  => {
                 </div>
                 <div className='form-group'>
                     <input
-                        type='text'
+                        type='date'
                         placeholder='Expiry Date'
                         name='expiryDate'
                         value ={expiryDate}

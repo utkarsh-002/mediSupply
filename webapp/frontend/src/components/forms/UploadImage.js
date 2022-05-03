@@ -38,8 +38,10 @@ const UploadImage = ()  => {
             <h1 className='large '>Upload Prescription</h1>
             <form className='form' onSubmit={submit}>
             <input onChange={fileSelected} type="file" accept="image/*"></input>
-            <input value={description} onChange={e => setDescription(e.target.value)} type="text"></input>
-            <button type="submit">Submit</button>
+            <br></br><br></br>
+            <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder='Description'></input>
+            <br></br>
+            <button type="submit" className="btn btn-light">Submit</button>
             </form>
             </div>
             </section>
