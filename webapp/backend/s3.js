@@ -14,7 +14,7 @@ const s3 = new S3({
 })
 
 // uploads a file to s3
-function uploadFile(file) {
+function uploadFile(file, callback) {
   const fileStream = fs.createReadStream(file.path)
 
   const uploadParams = {
@@ -23,7 +23,18 @@ function uploadFile(file) {
     Key: file.filename
   }
 
-  return s3.upload(uploadParams).promise()
+  return s3.upload(uploadParams, function (err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      let response = {
+        "statusCode": 200,
+        "body": JSON.stringify(data),
+        "isBase64Encoded": false
+      };
+      callback(null, response);
+    }
+  });
 }
 exports.uploadFile = uploadFile
 

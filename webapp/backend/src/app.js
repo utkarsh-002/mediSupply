@@ -492,25 +492,31 @@ app.get("/allDrug",async(req,res)=>{
 
 
 app.get('/images/:key', (req, res) => {
-  console.log(req.params)
+  // console.log(req.params)
   const key = req.params.key
   const readStream = getFileStream(key)
 
   readStream.pipe(res)
 })
 
-app.post('/images', upload.single('image'), async (req, res) => {
+app.post('/images', upload.single('image'), async (req, res, callback) => {
   const file = req.file
-  console.log(file)
+  // console.log(file)
 
   // apply filter
   // resize 
 
-  const result = await uploadFile(file)
+  const result = await uploadFile(file, callback)
   await unlinkFile(file.path)
-  console.log(result)
-  const description = req.body.description
+  // console.log(result)
   res.send({imagePath: `/images/${result.Key}`})
+})
+
+
+app.post('/get_data_from_aws', (req, res) => {
+  console.log(req.body.message);
+
+  res.send("Data received at backend");
 })
 
 

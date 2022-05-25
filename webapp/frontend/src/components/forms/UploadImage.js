@@ -3,10 +3,9 @@ import axios from 'axios'
 
 // import './App.css'
 
-async function postImage({image, description}) {
+async function postImage({image}) {
   const formData = new FormData();
   formData.append("image", image)
-  formData.append("description", description)
 
   const result = await axios.post('http://localhost:5000/images', formData, { headers: {'Content-Type': 'multipart/form-data'}})
   return result.data
@@ -16,12 +15,11 @@ async function postImage({image, description}) {
 const UploadImage = ()  => {
 
   const [file, setFile] = useState()
-  const [description, setDescription] = useState("")
   const [images, setImages] = useState([])
 
   const submit = async event => {
     event.preventDefault()
-    const result = await postImage({image: file, description})
+    const result = await postImage({image: file})
     setImages([result.image, ...images])
   }
 
@@ -39,8 +37,6 @@ const UploadImage = ()  => {
             <form className='form' onSubmit={submit}>
             <input onChange={fileSelected} type="file" accept="image/*"></input>
             <br></br><br></br>
-            <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder='Description'></input>
-            <br></br>
             <button type="submit" className="btn btn-light">Submit</button>
             </form>
             </div>
