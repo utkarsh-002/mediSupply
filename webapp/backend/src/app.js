@@ -11,10 +11,11 @@ const fs = require('fs');
 var base64 = require('base-64');
 var utf8 = require('utf8');
 var QRCode = require('qrcode');
-const unlinkFile = util.promisify(fs.unlink);
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-const { uploadFile, getFileStream } = require('../s3')
+// const unlinkFile = util.promisify(fs.unlink);
+// const multer = require('multer');
+// const upload = multer({ dest: 'uploads/' });
+// const { uploadFile, getFileStream } = require('../s3')
+const axios = require('axios').default
  
 let network = require('./fabric/network.js');
 let user = "consumer";
@@ -491,32 +492,56 @@ app.get("/allDrug",async(req,res)=>{
 })
 
 
-app.get('/images/:key', (req, res) => {
-  // console.log(req.params)
-  const key = req.params.key
-  const readStream = getFileStream(key)
+// app.get('/images/:key', (req, res) => {
+//   // console.log(req.params)
+//   const key = req.params.key
+//   const readStream = getFileStream(key)
 
-  readStream.pipe(res)
-})
+//   readStream.pipe(res)
+// })
 
-app.post('/images', upload.single('image'), async (req, res, callback) => {
-  const file = req.file
-  // console.log(file)
+// app.post('/images', upload.single('image'), async (req, res, callback) => {
+//   const file = req.file
+//   // console.log(file)
 
-  // apply filter
-  // resize 
+//   // apply filter
+//   // resize 
 
-  const result = await uploadFile(file, callback)
-  await unlinkFile(file.path)
-  // console.log(result)
-  res.send({imagePath: `/images/${result.Key}`})
-})
+//   const result = await uploadFile(file, callback)
+//   await unlinkFile(file.path)
+//   // console.log(result)
+//   res.send({imagePath: `/images/${result.Key}`})
+// })
 
 
-app.post('/get_data_from_aws', (req, res) => {
-  console.log(req.body.message);
+// app.post('/get_data_from_aws', (req, res) => {
+//   console.log(req.body.final_map);
+//   console.log(req.body.table);
+//   console.log(req.body.raw_text);
 
-  res.send("Data received at backend");
+//   res.send("Data received at backend");
+// })
+
+
+app.post('/images', async (req, res) => {
+  // console.log(req.body);
+
+  let input = req.body.Image;
+  input = input.substring(input.indexOf("base64")+7)
+
+  // console.log(input);
+  // console.log(typeof(input))
+
+  const result = await axios.post('https://i0dmspes01.execute-api.ap-south-1.amazonaws.com/default/medscan-lambda', 
+  {
+    Image:input
+  }, 
+  { headers: {'x-api-key': "O24L8ce7h7UpQDdwV2Lo6icXcmGBuWp98Hy5Bji3", 'Content-Type':'application/json'}}
+  )
+
+  let table = result.data.table;
+  console.log(table);
+  res.send("Data received");
 })
 
 

@@ -3,24 +3,38 @@ import axios from 'axios'
 
 // import './App.css'
 
-async function postImage({image}) {
-  const formData = new FormData();
-  formData.append("image", image)
+async function postImage({Image}) {
 
-  const result = await axios.post('http://localhost:5000/images', formData, { headers: {'Content-Type': 'multipart/form-data'}})
+  let formData = {Image:Image}
+
+  const result = await axios.post('http://localhost:5000/images', formData, { headers: {'Content-Type': 'application/json'}})
   return result.data
 }
 
 
 const UploadImage = ()  => {
 
+  // let base64code = ""
+
   const [file, setFile] = useState()
-  const [images, setImages] = useState([])
+  // const [images, setImages] = useState([])
+
+  let response1 = ""
 
   const submit = async event => {
     event.preventDefault()
-    const result = await postImage({image: file})
-    setImages([result.image, ...images])
+
+    // let reader = new FileReader();
+    // reader.readAsDataURL(file);
+
+    var reader = new FileReader();
+    reader.onloadend = async() => {
+      // console.log(reader.result)
+      response1 = await postImage({Image: reader.result})
+    }
+    reader.readAsDataURL(file);
+
+    // setImages([result.image, ...images])
   }
 
   const fileSelected = event => {
