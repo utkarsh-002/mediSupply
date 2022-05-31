@@ -540,7 +540,25 @@ app.post('/images', async (req, res) => {
   )
 
   let table = result.data.table;
-  console.log(table);
+  let query_answers = result.data.query_answers;
+
+  let details = {}
+  
+  query_answers.forEach(element => {
+    let k = Object.values(element)['1'];
+    let v = Object.values(element)['2'];
+    details[k] = v;
+  });
+
+  const doctors = await axios.post('https://www.nmc.org.in/MCIRest/open/getDataFromService?service=searchDoctor', 
+  {
+    registrationNo: details.DOC_REG_NO
+  }, 
+  { headers: {'Content-Type':'application/json'}}
+  )
+
+  console.log(doctors.data);
+
   res.send("Data received");
 })
 
