@@ -37,6 +37,7 @@ const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth")
 const User = require("../models/user")
 const Drug = require("../models/drug") 
+const Order = require("../models/order")
 const { check, validationResult } = require("express-validator");
 const conf = require("config");
 
@@ -213,6 +214,7 @@ app.delete('/deleteDrug', async (req, res) => {
     let drugId = req.query.drugId;
     // console.log("drug id : ", drugId)
 
+    // delete from mongo
     let d = await Drug.findOne({ drugId });
     Drug.deleteOne({drugId}, function(err){
       if(err){
@@ -220,6 +222,8 @@ app.delete('/deleteDrug', async (req, res) => {
         throw error
       }
     })
+
+    // delete from blockchain
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'deleteDrug', drugId);
     response = response.toString();
@@ -243,6 +247,8 @@ app.post('/updateDrug',async(req,res)=>{
       batchId: req.body.batchId,
       cost :req.body.cost
     };
+
+    // update in mongo
     const d = await Drug.findOne({
       drugId : req.body.drugId
     })
@@ -250,6 +256,7 @@ app.post('/updateDrug',async(req,res)=>{
       man : req.body.drugManufacturer,
       name : req.body.drugName
     });
+
     // console.log(newDrugData);
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'updateDrug',newDrugData);
@@ -328,6 +335,22 @@ app.post('/createOrder',async(req,res)=>{
       status: "in transit" //req.body.status
     }
 
+    //save to mongodb
+    const orderId = req.body.orderId
+    const drugId = req.body.drugId
+    const quantity = req.body.quantity
+    const currentOwner = "M"
+    const status = "in transit"
+    const o_id = new Order({
+      orderId,
+      drugId,
+      quantity,
+      currentOwner,
+      status
+    });
+    console.log("order Id saved : ",o_id)
+    await o_id.save();
+
     // console.log("Order Data : ",orderData);
 
     var bytes = utf8.encode(orderData.orderId);
@@ -361,6 +384,15 @@ app.post('/updateOrder',async(req,res)=>{
       newStatus: req.body.newStatus
     }
     
+    // update in mongo
+    const o = await Order.findOne({
+      orderId : req.body.orderId
+    })
+    await o.updateOne({
+      currentOwner : req.body.newCurrentOwner,
+      status : req.body.newStatus
+    });
+
     // console.log(newOrderData);
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'updateOrder',newOrderData);
@@ -394,6 +426,17 @@ app.get('/readOrder', async (req, res) => {
 app.delete('/deleteOrder', async (req, res) => {
   try{
     let orderId = req.query.orderId;
+
+    // delete from mongo
+    let o = await Order.findOne({ orderId });
+    Order.deleteOne({orderId}, function(err){
+      if(err){
+        let error = "No order of the given id is present or there has been some error in deleting the order, try again"
+        throw error
+      }
+    })
+    
+    // delete from blockchain
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'deleteOrder', orderId);
     response = response.toString();
@@ -487,10 +530,19 @@ app.get("/allDrug",async(req,res)=>{
     res.json(d);
   }
   catch(err){
-    res.status(500).send("Drugs not able retrived")
+    res.status(500).send("Drugs cannot be retrived")
   }
 })
 
+app.get("/allOrder",async(req,res)=>{
+  try{
+    const o = await Order.find()
+    res.json(o);
+  }
+  catch(err){
+    res.status(500).send("Orders cannot be retrived")
+  }
+})
 
 // app.get('/images/:key', (req, res) => {
 //   // console.log(req.params)
@@ -557,9 +609,16 @@ app.post('/images', async (req, res) => {
   { headers: {'Content-Type':'application/json'}}
   )
 
-  console.log(doctors.data);
+  // console.log(doctors.data);
+  let doctorVerified = false;
 
-  res.send("Data received");
+  if(doctors.data) {
+    doctorVerified = true;
+  }
+
+  console.log(doctorVerified)
+
+  res.status(200).send(doctorVerified);
 })
 
 

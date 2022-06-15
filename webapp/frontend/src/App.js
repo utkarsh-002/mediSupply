@@ -49,7 +49,7 @@ useEffect(() => {
               <PrivateRoute exact path="/readOrder" component={ReadOrder} />
               <PrivateRoute exact path="/verify" component={QRscanner} />
               <PrivateRoute exact path="/allDrug" component={AllDrug} />
-              <Route exact path="/uploadimage" component={UploadImage} />
+              <PrivateRoute exact path="/uploadimage" component={UploadImage} />
             </Switch>
  </Router>
   </Provider>

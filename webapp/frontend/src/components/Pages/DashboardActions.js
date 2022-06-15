@@ -50,7 +50,7 @@ const DashboardActions = ({role}) => {
                 <i className="fas fa-qrcode text-primary"></i>Verify</Link>  
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/uploadimage" className="btn btn-light">
-                <i class="fa-solid fa-upload text-primary"></i>Upload Prescription</Link>
+                <i className="fa-solid fa-upload text-primary"></i>Upload Prescription</Link>
                 
         </div>
       )  

@@ -1,51 +1,28 @@
 import { useState, Fragment } from 'react'
-import axios from 'axios'
-
-// import './App.css'
-
-async function postImage({Image}) {
-
-  let formData = {Image:Image}
-
-  const result = await axios.post('http://localhost:5000/images', formData, { headers: {'Content-Type': 'application/json'}})
-  return result.data
-}
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { FileUploader } from "react-drag-drop-files";
+import { verifyPrescription } from "./../../actions/verifyPrescription";
 
 
-const UploadImage = ()  => {
-
-  // let base64code = ""
+const UploadImage = ({verifyPrescription , history})  => {
+  
+  const fileTypes = ["JPEG", "PNG", "GIF"];
 
   const [file, setFile] = useState()
-  // const [images, setImages] = useState([])
-
-  let response1 = ""
-
   const submit = async event => {
     event.preventDefault()
-
-    // let reader = new FileReader();
-    // reader.readAsDataURL(file);
-
-    var reader = new FileReader();
-    reader.onloadend = async() => {
-      // console.log(reader.result)
-      response1 = await postImage({Image: reader.result})
-    }
-    reader.readAsDataURL(file);
-
-    // setImages([result.image, ...images])
+    verifyPrescription(file,history)
   }
 
-  const fileSelected = event => {
-    const file = event.target.files[0]
+  const fileSelected = file => {
+    // const file = event.target.files[0]
 		setFile(file)
 	}
 
   return (
-
         <Fragment>
-            <section className="container">
+            {/* <section className="container">
             <div className="card-6">    
             <h1 className='large '>Upload Prescription</h1>
             <form className='form' onSubmit={submit}>
@@ -54,10 +31,31 @@ const UploadImage = ()  => {
             <button type="submit" className="btn btn-light">Submit</button>
             </form>
             </div>
-            </section>
-                
+            </section> */}
+
+            <section className="container">
+            <div className="card-8">    
+            <h1 className='large '>Upload Prescription</h1>
+            <form className='form' onSubmit={submit}>
+            <FileUploader
+                multiple={true}
+                handleChange={fileSelected}
+                name="file"
+                types={fileTypes}
+                />
+                <br></br><p>{file ? `File name: ${file[0].name}` : "no files uploaded yet"}</p>
+            <br></br><br></br>
+            <button type="submit" className="btn btn-light">Submit</button>
+            </form>
+            </div>
+            </section>   
         </Fragment>
   );
 }
 
-export default UploadImage;
+UploadImage.propTypes = {
+  verifyPrescription: PropTypes.func.isRequired
+}
+
+
+export default connect(null,{verifyPrescription})(UploadImage);
