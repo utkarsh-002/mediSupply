@@ -7,7 +7,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     role:{
         type: String,
-        enum:['man','dist','ret'],
+        enum:['man','dist','ret','admin'],
         required : true
     },
     // license number, established, registered date, address, contact
@@ -23,6 +23,14 @@ const userSchema = new Schema({
     contact:{
         type:String,
         required: true
+    },
+    validCount : {
+        type : Number,
+        default : 0,
+    },
+    invalidCount : {
+        type : Number,
+        default : 0,
     },
     date :{
         type: Date, default: Date.now

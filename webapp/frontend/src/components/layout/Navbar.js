@@ -27,7 +27,26 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
         </a>
       </li>
     </ul>
-  )
+    )
+
+    const authLinksAdmin = (
+      <ul>
+        <li>
+          <Link to="/dashboard">
+            <i className="fas fa-user"></i>{" "}
+            <span className="hide-sm">Dashboard</span>
+          </Link>
+        </li>
+        <li>
+          <a onClick={logout} href="/">
+            <i className="fas fa-sign-out-alt"></i>{" "}
+            <span className="hide-sm">Logout</span>
+          </a>
+        </li>
+      </ul>
+      )
+  
+
   const guestLinks = (
     <ul>
       {/* <li>
@@ -54,7 +73,7 @@ const Navbar = ({ auth: { user , loading }, logout }) => {
         </Link>
       </h1>
       { !loading && (
-        <Fragment>{ user? authLinks : guestLinks}</Fragment>
+        <Fragment>{ !user ? guestLinks : user.role == "admin" ? authLinksAdmin : authLinks}</Fragment>
       )}
     </nav>
   )

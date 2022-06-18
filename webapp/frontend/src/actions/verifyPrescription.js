@@ -3,13 +3,13 @@ import { setAlert } from "./alert"
 import { VERIFY_PRESCRIPTION_SUCCESS, VERIFY_PRESCRIPTION_ERROR} from "./types"
 
 
-export const verifyPrescription = (file , history) => async dispatch => {
+export const verifyPrescription = (file , history,user) => async dispatch => {
     try {
         console.log(file)
         var reader = new FileReader();
         reader.readAsDataURL(file[0]);
         reader.onloadend = async() => {
-            let formData = {Image:reader.result}
+            let formData = {Image:reader.result , email : user.email}
             let result = await axios.post('http://localhost:5000/images', formData, { headers: {'Content-Type': 'application/json'}})
             console.log(result.data)
             if(result.data){

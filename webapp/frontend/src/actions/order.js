@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert"
-import { CREATE_ORDER, ORDER_ERROR, GET_ORDER, CLEAR_ORDER} from "./types"
+import { CREATE_ORDER, ORDER_ERROR, GET_ORDER, CLEAR_ORDER, ALL_ORDER} from "./types"
 
 
 
@@ -75,5 +75,26 @@ export const createOrder = (
             type: ORDER_ERROR,
             payload: { msg: err.response.statusText, status: err.response.status }
         });
+    }
+}
+
+export const getAllOrder = () => async dispatch => {
+    try {
+        dispatch({ type: CLEAR_ORDER })
+        const res = await axios.get("http://localhost:5000/allOrder/");
+        console.log(res.data)
+        dispatch({
+            type: ALL_ORDER,
+            payload: res.data
+        })
+    } catch (err) {
+        dispatch({
+            type: ORDER_ERROR,
+            payload: {
+                msg: err.response.statusText,
+                status: err.response.status
+            }
+
+        })
     }
 }

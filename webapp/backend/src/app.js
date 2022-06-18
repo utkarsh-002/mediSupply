@@ -294,11 +294,11 @@ app.post('/createDrug',async(req,res)=>{
       drugId,
       name
     });
-    console.log("drug Id saved : ",d_id)
+    // console.log("drug Id saved : ",d_id)
     await d_id.save();
 
     let networkObj = await network.connectToNetwork(appAdmin);
-    console.log(networkObj);
+    // console.log(networkObj);
     let response = await network.invoke(networkObj, false, 'createDrug', drugData);
     // console.log(response);
     response = response.toString();
@@ -348,7 +348,7 @@ app.post('/createOrder',async(req,res)=>{
       currentOwner,
       status
     });
-    console.log("order Id saved : ",o_id)
+    // console.log("order Id saved : ",o_id)
     await o_id.save();
 
     // console.log("Order Data : ",orderData);
@@ -544,6 +544,32 @@ app.get("/allOrder",async(req,res)=>{
   }
 })
 
+app.get("/allUser",async(req,res)=>{
+  try{
+    const u = await User.find()
+    res.json(u);
+  }
+  catch(err){
+    res.status(500).send("Users cannot be retrived")
+  }
+})
+
+app.post("/getData",async(req,res)=>{
+  try{
+    let email = req.body.email;
+    let user = await User.findOne({ email });
+    let valid = user.validCount;
+    let invalid = user.invalidCount;
+    let json = {
+      valid,
+      invalid
+    }
+    res.status(200).send(json);
+  }catch(err){
+    res.status(500).send(err)
+  }
+})
+
 // app.get('/images/:key', (req, res) => {
 //   // console.log(req.params)
 //   const key = req.params.key
@@ -580,6 +606,10 @@ app.post('/images', async (req, res) => {
 
   let input = req.body.Image;
   input = input.substring(input.indexOf("base64")+7)
+  let email = req.body.email;
+
+  console.log(input);
+  console.log(email);
 
   // console.log(input);
   // console.log(typeof(input))
@@ -609,14 +639,28 @@ app.post('/images', async (req, res) => {
   { headers: {'Content-Type':'application/json'}}
   )
 
-  // console.log(doctors.data);
+  console.log(doctors.data);
+  console.log(typeof(doctors.data));
   let doctorVerified = false;
 
   if(doctors.data) {
     doctorVerified = true;
   }
 
-  console.log(doctorVerified)
+  let user = await User.findOne({ email });
+  if(user){
+    if(doctorVerified){
+      user.validCount++;
+    }else{
+      user.invalidCount++;
+    }
+  }
+
+  // console.log(user)
+
+  await user.save()
+
+  // console.log(doctorVerified)
 
   res.status(200).send(doctorVerified);
 })

@@ -5,6 +5,19 @@ import { Link } from "react-router-dom"
 
 const DashboardActions = ({role}) => {
 
+    const AdminLinks = (
+        <div className="dash-buttons">
+            <Link to="/allDrug" className="btn btn-light">
+                <i className="fas fa-file-prescription text-primary"></i>All Drugs</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <Link to="/allOrder" className="btn btn-light">
+                <i className="fas fa-edit text-primary"></i>All Orders</Link>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <Link to="/allUser" className="btn btn-light">
+                <i className="fas fa-user text-primary"></i>All Users</Link>
+        </div>
+    )
+    
     const ManLinks = (
         <div className="dash-buttons">
             <Link to="/addDrug" className="btn btn-light">
@@ -59,7 +72,7 @@ const DashboardActions = ({role}) => {
 
     return (
         <>
-            {role === "man" ? ManLinks : role === "dist" ? DistLinks : ReatailLinks } 
+            {role== "admin" ? AdminLinks : role === "man" ? ManLinks : role === "dist" ? DistLinks : ReatailLinks } 
 
         </>
     )

@@ -5,14 +5,14 @@ import { FileUploader } from "react-drag-drop-files";
 import { verifyPrescription } from "./../../actions/verifyPrescription";
 
 
-const UploadImage = ({verifyPrescription , history})  => {
+const UploadImage = ({user,verifyPrescription , history})  => {
   
   const fileTypes = ["JPEG", "PNG", "GIF"];
 
   const [file, setFile] = useState()
   const submit = async event => {
     event.preventDefault()
-    verifyPrescription(file,history)
+    verifyPrescription(file,history,user)
   }
 
   const fileSelected = file => {
@@ -54,8 +54,12 @@ const UploadImage = ({verifyPrescription , history})  => {
 }
 
 UploadImage.propTypes = {
-  verifyPrescription: PropTypes.func.isRequired
+  verifyPrescription: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
+const mapStateToProps = state => ({
+  user : state.auth.user,
+})
 
-export default connect(null,{verifyPrescription})(UploadImage);
+export default connect(mapStateToProps,{verifyPrescription})(UploadImage);
