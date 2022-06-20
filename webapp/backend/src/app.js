@@ -383,15 +383,22 @@ app.post('/updateOrder',async(req,res)=>{
       newCurrentOwner : req.body.newCurrentOwner,
       newStatus: req.body.newStatus
     }
+
+    console.log(newOrderData);
     
     // update in mongo
-    const o = await Order.findOne({
+    let o = await Order.findOne({
       orderId : req.body.orderId
     })
-    await o.updateOne({
+
+    console.log(o);
+
+    if(o){
+      await o.updateOne({
       currentOwner : req.body.newCurrentOwner,
       status : req.body.newStatus
     });
+    }
 
     // console.log(newOrderData);
     let networkObj = await network.connectToNetwork(appAdmin);
@@ -435,7 +442,7 @@ app.delete('/deleteOrder', async (req, res) => {
         throw error
       }
     })
-    
+
     // delete from blockchain
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'deleteOrder', orderId);
@@ -454,6 +461,16 @@ app.get('/verifyAsDistributor', async (req, res) => {
     let orderId = req.query.orderId;
     var bytes = base64.decode(orderId);
     var decodedOrderId = utf8.decode(bytes);
+    let o = await Order.findOne({
+      orderId : decodedOrderId
+    })
+    if(o){
+      console.log(o)
+      await o.updateOne({
+        currentOwner : "D",
+        status : "in transit"
+      });
+    }
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'verifyAsDistributor', decodedOrderId);
     response = response.toString();
@@ -469,6 +486,16 @@ app.get('/verifyAsRetailer', async (req, res) => {
     let orderId = req.query.orderId;
     var bytes = base64.decode(orderId);
     var decodedOrderId = utf8.decode(bytes);
+    let r = await Order.findOne({
+      orderId : decodedOrderId
+    })
+    if(r){
+      console.log(r)
+      await r.updateOne({
+        currentOwner : "R",
+        status : "in transit"
+      });
+    }
     let networkObj = await network.connectToNetwork(appAdmin);
     
     //dict
@@ -496,6 +523,16 @@ app.get('/verifyAsConsumer', async (req, res) => {
     let orderId = req.query.orderId;
     var bytes = base64.decode(orderId);
     var decodedOrderId = utf8.decode(bytes);
+    let c = await Order.findOne({
+      orderId : decodedOrderId
+    })
+    if(c){
+      console.log(c)
+      await c.updateOne({
+        currentOwner : "C",
+        status : "Delivered"
+      });
+    }
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'verifyAsConsumer', decodedOrderId);
     response = response.toString();
@@ -608,8 +645,8 @@ app.post('/images', async (req, res) => {
   input = input.substring(input.indexOf("base64")+7)
   let email = req.body.email;
 
-  console.log(input);
-  console.log(email);
+  // console.log(input);
+  // console.log(email);
 
   // console.log(input);
   // console.log(typeof(input))
@@ -639,13 +676,16 @@ app.post('/images', async (req, res) => {
   { headers: {'Content-Type':'application/json'}}
   )
 
-  console.log(doctors.data);
-  console.log(typeof(doctors.data));
+  // console.log(doctors.data);
+  // console.log(typeof(doctors.data));
+
   let doctorVerified = false;
 
-  if(doctors.data) {
+  if(!(Object.keys(doctors.data).length == 0)) {
     doctorVerified = true;
   }
+
+  console.log(doctorVerified);
 
   let user = await User.findOne({ email });
   if(user){
@@ -667,7 +707,7 @@ app.post('/images', async (req, res) => {
 
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Example app listening at http://localhost:5000`)
+  console.log(`MedScan backend listening at http://localhost:5000`)
 })
 
 

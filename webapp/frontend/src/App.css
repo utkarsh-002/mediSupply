@@ -66,7 +66,7 @@
   .large {
     font-size: 3rem;
     line-height: 1.2;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
   
   .lead {
@@ -86,6 +86,10 @@
     color: var(--dark-color);
   }
   
+  .center{
+    margin : 0 auto;
+  }
+
   /* Padding */
   .p {
     padding: 0.5rem;

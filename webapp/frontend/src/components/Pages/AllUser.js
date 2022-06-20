@@ -44,9 +44,9 @@ const profile_display = {
   boxShadow: "0 0.1rem 0 0 rgba(0, 0, 0, 0.1)",
   margin: "0 auto",
   display: "grid",
-  maxWidth: "800px",
-  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-  gridAutoRows: "180px",
+  maxWidth: "1200px",
+  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+  gridAutoRows: "200px",
   gridGap:"20px",
   paddingBottom: "70px"
 }
