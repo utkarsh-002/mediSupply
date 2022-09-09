@@ -361,7 +361,7 @@ app.post('/createOrder',async(req,res)=>{
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createOrder', orderData);
 
-    // console.log(response);
+    console.log(response);
 
     response = response.toString();
 
@@ -371,7 +371,7 @@ app.post('/createOrder',async(req,res)=>{
     res.send(response);
 
   }catch(err){
-    console.error(err.response.data);
+    console.error(err);
     res.status(500).send("Server Error");
   }
 })

@@ -1,0 +1,15 @@
+1. Remove admin and enroll new admin in backend.
+
+node enrollAdmin.js
+
+2. Deploy contract using VS Code and IBM Blockchain Platform extension
+
+3. Export connection profile from extension
+
+4. Deploy Lambda functions on Amazon Web Services. Add boto3 and trp layers to lambda function
+
+5. Clear database on MongoDB
+
+6. To run backend and frontend
+
+npm start

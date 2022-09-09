@@ -15,7 +15,7 @@ export const verifyPrescription = (file , history,user) => async dispatch => {
             if(result.data){
                 dispatch(setAlert("Prescription Verified","success"))
             }else{
-                dispatch(setAlert("Presciption Invalid","danger"))
+                dispatch(setAlert("Prescription Invalid","danger"))
             }
             dispatch({
                 payload : result.data,
