@@ -34,10 +34,11 @@ connectDB()
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const auth = require("../middleware/auth")
-const User = require("../models/user")
-const Drug = require("../models/drug") 
-const Order = require("../models/order")
+const auth = require("../middleware/auth");
+const User = require("../models/user");
+const Drug = require("../models/drug");
+const testDrug = require("../models/testDrug");
+const Order = require("../models/order");
 const { check, validationResult } = require("express-validator");
 const conf = require("config");
 
@@ -197,13 +198,16 @@ app.get('/drugExists', async (req, res) => {
 app.get('/readDrug', async (req, res) => {
   try{
     let drugId = req.query.drugId;
+    const drug = await testDrug.findOne({drugId:drugId});
+    console.log(drug);
+    res.send(drug);
     // console.log("drug id : ", drugId)
-    let networkObj = await network.connectToNetwork(appAdmin);
-    let response = await network.invoke(networkObj, true, 'readDrug', drugId);
-    response = response.toString();
-    res.send(response);
+    // let networkObj = await network.connectToNetwork(appAdmin);
+    // let response = await network.invoke(networkObj, true, 'readDrug', drugId);
+    // response = response.toString();
+    // res.send(response);
   }catch(err){
-    console.error(err.response.data);
+    console.error(err);
     res.status(500).send("Server Error")
   }
 });
@@ -286,17 +290,37 @@ app.post('/createDrug',async(req,res)=>{
       cost :req.body.cost
     }
     // console.log(drugData);
-    const man = req.body.drugManufacturer
-    const drugId = req.body.drugId
-    const name = req.body.drugName
+    const drugManufacturer = req.body.drugManufacturer;
+    const man = req.body.drugManufacturer;
+    const drugId = req.body.drugId;
+    const drugName = req.body.drugName;
+    const name = req.body.drugName;
+    const manDate = req.body.manDate;
+    const expiryDate = req.body.expiryDate;
+    const batchId = req.body.batchId;
+    const cost = req.body.cost;
     const d_id = new Drug({
       man,
       drugId,
       name
     });
-    // console.log("drug Id saved : ",d_id)
+    const test_d=new testDrug({
+      drugManufacturer,
+      drugId,
+      drugName,
+      manDate,
+      expiryDate,
+      batchId,
+      cost
+    });
+    console.log("drug Id saved : ",test_d);
+    try {
+      await test_d.save();
+      console.log("Saved data");
+    } catch (error) {
+      console.log(error);
+    }
     await d_id.save();
-
     let networkObj = await network.connectToNetwork(appAdmin);
     // console.log(networkObj);
     let response = await network.invoke(networkObj, false, 'createDrug', drugData);
@@ -306,7 +330,7 @@ app.post('/createDrug',async(req,res)=>{
     res.send(response);
 
   }catch(err){
-    console.error(err.response.data);
+    console.error(err);
     res.status(500).send("Server Error");
   }
 })
@@ -419,12 +443,28 @@ app.post('/updateOrder',async(req,res)=>{
 app.get('/readOrder', async (req, res) => {
   try{
     let orderId = req.query.orderId;
-    let networkObj = await network.connectToNetwork(appAdmin);
-    let response = await network.invoke(networkObj, true, 'readOrder', orderId);
-    response = response.toString();
-    res.send(response);
+    let o = await Order.findOne({
+      orderId : orderId
+    });
+    let drug = await testDrug.findOne({drugId:o.drugId});
+    let order = {
+      orderId: o.orderId,
+      drugId: o.drugId,
+      drugName: drug.drugName,
+      quantity: o.quantity,
+      currentOwner: o.currentOwner,
+      status: o.status
+    };
+    order.drugName = drug.drugName;
+    console.log(order);
+    res.send(order);
+    // let networkObj = await network.connectToNetwork(appAdmin);
+    // let response = await network.invoke(networkObj, true, 'readOrder', orderId);
+    // response = response.toString();
+    // res.send(response);
   }catch(err){
-    console.error(err.response.data);
+    // console.error(err.response.data);
+    console.log(err);
     res.status(500).send("Server Error")
   }
 });
@@ -639,17 +679,10 @@ app.post("/getData",async(req,res)=>{
 
 
 app.post('/images', async (req, res) => {
-  // console.log(req.body);
 
   let input = req.body.Image;
   input = input.substring(input.indexOf("base64")+7)
   let email = req.body.email;
-
-  // console.log(input);
-  // console.log(email);
-
-  // console.log(input);
-  // console.log(typeof(input))
 
   const result = await axios.post('https://i0dmspes01.execute-api.ap-south-1.amazonaws.com/default/medscan-lambda', 
   {
@@ -696,11 +729,8 @@ app.post('/images', async (req, res) => {
     }
   }
 
-  // console.log(user)
-
   await user.save()
 
-  // console.log(doctorVerified)
 
   res.status(200).send(doctorVerified);
 })

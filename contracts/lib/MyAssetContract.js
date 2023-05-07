@@ -9,7 +9,8 @@ const { Contract } = require('fabric-contract-api');
 class MyAssetContract extends Contract {
 
     async printSomething(ctx, text){
-        return JSON.parse(text);
+        const buffer = text
+        return (!!buffer && buffer.length > 0);
     }
 
     async drugExists(ctx, drugId) {

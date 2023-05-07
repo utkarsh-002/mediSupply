@@ -1,7 +1,7 @@
 //Import Hyperledger Fabric 1.4 programming model - fabric-network
 'use strict';
 
-const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network');
+const { Gateway, X509WalletMixin,Wallets,FileSystemWallet } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 
@@ -29,10 +29,16 @@ exports.connectToNetwork = async function (userName) {
   
     try {
       const walletPath = path.join(process.cwd(), 'wallet');
-      const wallet = new FileSystemWallet(walletPath);
+      const wallet = await Wallets.newFileSystemWallet(walletPath);
       console.log(`Wallet path: ${walletPath}`);
       console.log('userName: ');
       console.log(userName);
+      // Set up the connection options
+
+      // Import the identity into the wallet
+      const identityLabel = 'admin';
+      const identity = X509WalletMixin.createIdentity('Org1MSP', adminIdentity.certificate, adminIdentity.key.toBytes());
+      await wallet.import(identityLabel, identity);
   
       console.log('wallet: ');
       console.log(util.inspect(wallet));
@@ -47,11 +53,14 @@ exports.connectToNetwork = async function (userName) {
         response.error = 'An identity for the user ' + userName + ' does not exist in the wallet. Register ' + userName + ' first';
         return response;
       }
-  
+      
       console.log('before gateway.connect: ');
-
-  
-      await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
+      //await gateway.connect(ccp, { wallet, identity: userName, discovery: gatewayDiscovery });
+      await gateway.connect(ccp, {
+        wallet,
+        identity: userName,
+        discovery: { enabled: true, asLocalhost: true },
+      });
   
       // Connect to our local fabric
       const network = await gateway.getNetwork('mychannel');
@@ -59,7 +68,7 @@ exports.connectToNetwork = async function (userName) {
   
       console.log('Connected to mychannel. ');
       // Get the contract we have installed on the peer
-      const contract = await network.getContract('contracts');
+      const contract = network.getContract('contracts');
       
   
   

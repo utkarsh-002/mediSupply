@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://Manu123:Manu123@cluster0.g0bay.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "mongoURI": "mongodb+srv://utkarsh:4Zyt4XL45WlqjrLP@cluster0.1tncte2.mongodb.net/mediSupply?retryWrites=true&w=majority",
     "jwtSecret": "lm2n"
 }

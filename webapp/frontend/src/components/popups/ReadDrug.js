@@ -29,7 +29,6 @@ const ReadDrug = ({readDrug ,clearDrug, drug}) => {
   const onClick = e => {
       clearDrug();
   }
-
   return (
     <section className="landing">
        <div className="dark-overlay">
@@ -38,8 +37,8 @@ const ReadDrug = ({readDrug ,clearDrug, drug}) => {
          <Fragment> <div className="card-6">
            <h4 className="large"> Drug Details</h4> 
            <p className="text-inner">Name :  {drug.drug.drugName}</p>
-           <p className="text-inner">Manufacturer :  {drug.drug.manufacturer}</p>
-           <p className="text-inner">Manufactured Date :  {drug.drug.mfdDate}</p>
+           <p className="text-inner">Manufacturer :  {drug.drug.manufacturer || drug.drug.drugManufacturer}</p>
+           <p className="text-inner">Manufactured Date :  {drug.drug.mfdDate|| drug.drug.manDate}</p>
            <p className="text-inner">Expiry Date :  {drug.drug.expiryDate}</p>
            <p className="text-inner">Batch ID :  {drug.drug.batchId}</p>
            <button className="btn btn-form" onClick={ (e) => onClick(e)} >Go Again</button>

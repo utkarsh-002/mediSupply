@@ -39,5 +39,16 @@
         }
     },
     "type": "gateway",
-    "version": "1.0"
+    "version": "1.0",
+    "wallet": {
+        "type": "filesystem",
+        "label": "Org1",
+        "options": {
+          "path": "./wallet/Org1",
+          "store": {
+            "type": "filesystem",
+            "path": "./wallet/Org1A"
+          }
+        }
+      }
 }

@@ -14,7 +14,7 @@ const Landing = ({user}) => {
     <section className="landing">
       <div className="dark-overlay">
         <div className="landing-inner">
-          <h1 className="x-large highlight">MedScan</h1>
+          <h1 className="x-large highlight">MediSupply</h1>
           <p className="lead highlight1">Blockchain Based Solution to Medical Supply chain Management</p>
           <div className="buttons">
             <Link to="/login" className="btn btn-light">
