@@ -17,7 +17,7 @@ const Landing = ({user}) => {
           <h1 className="x-large highlight">MediSupply</h1>
           <p className="lead highlight1">Blockchain Based Solution to Medical Supply chain Management</p>
           <div className="buttons">
-            <Link to="/login" className="btn btn-light">
+            <Link to="/login" className="btn btn-dark">
               Login <i className="fa fa-arrow-right"/>
             </Link>
           </div>

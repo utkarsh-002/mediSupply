@@ -19,7 +19,7 @@ const AllOrder = ({order:{orders,loading},getAllOrder}) => {
         {/* <h1>All Drugs</h1> */}
         <Fragment>
             {loading ? <p className="lead">Orders loading.....</p> : <Fragment>
-                <p className="lead">
+                <p className="lead text-primary">
                     { ' ' } Browse Available Orders{/* Muski scan karti hai */}
                 </p>
                 <div className="profiles">

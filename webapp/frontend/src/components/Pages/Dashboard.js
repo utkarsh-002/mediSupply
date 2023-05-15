@@ -10,8 +10,7 @@ const Dashboard = ({ auth: { user }}) => {
 
     return <Fragment>
       <section className="container">
-      <h1 className='large text-primary'>Dashboard</h1>
-        <p className='lead'>
+        <p className='lead text-dark'>
             <i className='fas fa-user' /> Welcome {user && user.userName}
         </p>
         <br/>

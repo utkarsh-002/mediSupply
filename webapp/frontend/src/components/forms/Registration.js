@@ -25,7 +25,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       
         const onSubmit = (e) => {
         e.preventDefault()
-             console.log(formData);
+            console.log(formData);
           register({userName,email,password,contact,license_number,address,role});
         
       }
@@ -79,9 +79,18 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                         <option value='man'>Manufacturer</option>
                         <option value='dist'>Distributor</option>
                         <option value='ret'>Retailer</option>
+                        <option value='admin'>Administrator</option>
                         </select>
                 </div>
                
+               {/* {role == "admin"? <div className='form-group'></div>: <div className='form-group'>
+                    <input
+                        type='text'
+                        placeholder='License Number'
+                        name='license_number'
+                        value ={license_number}
+                        onChange={e => onChange(e)}
+                    /></div>} */}
                 <div className='form-group'>
                     <input
                         type='text'

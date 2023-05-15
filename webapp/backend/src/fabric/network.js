@@ -31,14 +31,14 @@ exports.connectToNetwork = async function (userName) {
       const walletPath = path.join(process.cwd(), 'wallet');
       const wallet = await Wallets.newFileSystemWallet(walletPath);
       console.log(`Wallet path: ${walletPath}`);
-      console.log('userName: ');
+      console.log('userName:');
       console.log(userName);
       // Set up the connection options
 
       // Import the identity into the wallet
       const identityLabel = 'admin';
-      const identity = X509WalletMixin.createIdentity('Org1MSP', adminIdentity.certificate, adminIdentity.key.toBytes());
-      await wallet.import(identityLabel, identity);
+      // const identity = X509WalletMixin.createIdentity('Org1MSP', adminIdentity.certificate, adminIdentity.key.toBytes());
+      // await wallet.import(identityLabel, identity);
   
       console.log('wallet: ');
       console.log(util.inspect(wallet));
@@ -59,13 +59,13 @@ exports.connectToNetwork = async function (userName) {
       await gateway.connect(ccp, {
         wallet,
         identity: userName,
-        discovery: { enabled: true, asLocalhost: true },
+        // discovery: { enabled: true, asLocalhost: true },
+        discovery: gatewayDiscovery
       });
   
       // Connect to our local fabric
       const network = await gateway.getNetwork('mychannel');
     
-  
       console.log('Connected to mychannel. ');
       // Get the contract we have installed on the peer
       const contract = network.getContract('contracts');
@@ -132,7 +132,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
           console.log(util.inspect(args));
           console.log('before submit');
           // args = JSON.parse(args);
-          let response = await networkObj.contract.submitTransaction(func, args);
+          // let response = await networkObj.contract.submitTransaction(func, args);
           console.log('after submit');
           console.log(response);
           console.log(`Transaction ${func} with args ${args} has been submitted`);
@@ -154,8 +154,8 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
       }
   
     } catch (error) {
-      console.error(`Failed to submit transaction: ${error}`);
-      return error;
+      // console.error(`Failed to submit transaction: ${error}`);
+      // return error;
     }
   };
 

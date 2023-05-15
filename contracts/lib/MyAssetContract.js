@@ -9,7 +9,7 @@ const { Contract } = require('fabric-contract-api');
 class MyAssetContract extends Contract {
 
     async printSomething(ctx, text){
-        const buffer = text
+        const buffer = text;
         return (!!buffer && buffer.length > 0);
     }
 
@@ -168,18 +168,18 @@ class MyAssetContract extends Contract {
         const quantity = read.quantity;
         const drugName = read.drugName;
         const status = read.status;
-        if(currentOwner === 'M'){
-            const newCurrentOwner = "D";
+        if(currentOwner === 'Manufacturer' ||currentOwner === 'M'){
+            const newCurrentOwner = 'Distributor';
             const asset = { drugId, drugName, quantity, currentOwner: newCurrentOwner, status};
             const buffer = Buffer.from(JSON.stringify(asset));
             await ctx.stub.putState(orderId, buffer);
-            return "Verified";
+            return 'Verified';
         }
-        else if(currentOwner === 'D'){
-            return "Verified";
+        else if(currentOwner === 'D'||currentOwner === 'Distributor'){
+            return 'Verified';
         }
         else{
-            return "Not verified";
+            return 'Not verified';
         }
     }
 
@@ -196,18 +196,18 @@ class MyAssetContract extends Contract {
         const quantity = read.quantity;
         const drugName = read.drugName;
         const status = read.status;
-        if(currentOwner === 'D'){
-            const newCurrentOwner = "R";
+        if(currentOwner === 'D' ||currentOwner === 'Distributor'){
+            const newCurrentOwner = 'Retailer';
             const asset = { drugId, drugName, quantity, currentOwner: newCurrentOwner, status};
             const buffer = Buffer.from(JSON.stringify(asset));
             await ctx.stub.putState(orderId, buffer);
             return "Verified";
         }
-        else if(currentOwner === 'R'){
-            return "Verified";
+        else if(currentOwner === 'R' || currentOwner==='Retailer'){
+            return 'Verified';
         }
         else{
-            return "Not verified";
+            return 'Not verified';
         }
     }
 
@@ -224,19 +224,19 @@ class MyAssetContract extends Contract {
         const quantity = read.quantity;
         const drugName = read.drugName;
         const status = read.status;
-        if(currentOwner === 'R'){
-            const newCurrentOwner = "C";
-            const newStatus = "Delivered";
+        if(currentOwner === 'R' ||currentOwner === 'Retailer'){
+            const newCurrentOwner = 'Customer';
+            const newStatus = 'Delivered';
             const asset = { drugId, drugName, quantity, currentOwner: newCurrentOwner, status: newStatus};
             const buffer = Buffer.from(JSON.stringify(asset));
             await ctx.stub.putState(orderId, buffer);
-            return "Verified";
+            return 'Verified';
         }
-        else if(currentOwner === 'C'){
-            return "Verified";
+        else if(currentOwner === 'C'||currentOwner === 'Customer'){
+            return 'Verified';
         }
         else{
-            return "Not verified";
+            return 'Not verified';
         }
     }
 

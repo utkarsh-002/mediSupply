@@ -19,8 +19,8 @@ const AllDrug = ({drug:{drugs,loading},getAllDrug}) => {
         {/* <h1>All Drugs</h1> */}
         <Fragment>
             {loading ? <p className="lead">Drugs loading.....</p> : <Fragment>
-                <p className="lead">
-                    { ' ' } Browse Available Drugs{/* Muski scan karti hai */}
+                <p className="lead text-primary">
+                    { ' ' } All Drugs Listed
                 </p>
                 <div className="profiles">
                     {drugs.length > 0 ? (drugs.map(drug=> (<DrugItem key={drug._id} drug={drug} />))) :

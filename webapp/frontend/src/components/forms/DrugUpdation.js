@@ -39,8 +39,8 @@ const DrugUpdate = ({ updateDrug ,history})  => {
         <Fragment>
             <section className="container">
             <div className="card-6">
-            <span ><Link to="/dashboard"> <i className="fa fa-arrow-left"></i></Link>  </span>    
-            <h1 className='large '>Edit Drug Details</h1>
+            <span ><Link to="/dashboard"> <i className="fas fa-arrow-left fa-lg fa-inverse"></i></Link>  </span>    
+            <h1 className='large text-light'>Edit Drug Details</h1>
             <form className='form' onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
                     <input 

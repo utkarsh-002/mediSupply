@@ -35,7 +35,7 @@ const UploadImage = ({user,verifyPrescription , history})  => {
 
             <section className="container">
             <div className="card-8">    
-            <h1 className='large '>Upload Prescription</h1>
+            <h1 className='large text-light'>Upload Prescription</h1>
             <form className='form' onSubmit={submit}>
             <FileUploader
                 multiple={true}

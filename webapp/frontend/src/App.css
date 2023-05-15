@@ -12,7 +12,14 @@
     padding: 0;
   }
 
+  html{
+    overflow: auto;
+  }
 
+  
+::-webkit-scrollbar {
+  display: none;
+}
   
   body {
     /* font-family: "Architects Daughter", cursive; */
@@ -21,6 +28,7 @@
     line-height: 1.6;
     background-color: #ffffff;
     color: #333;
+    overflow-y: "hidden",
   }
   
   a {
@@ -55,6 +63,12 @@
     margin-bottom: 3rem;
     
   }
+
+  /* .dashboard{
+    background : url("./components/img/drug8.jpg") no-repeat center center/cover;
+    height: 100vh;
+    position: relative;
+  } */
   
   /* Text Styles*/
   .x-large {
@@ -70,7 +84,8 @@
   }
   
   .lead {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: 500;
     margin-bottom: 1rem;
   }
   
@@ -81,9 +96,14 @@
   .text-primary {
     color: var(--primary-color);
   }
+
+  .text-light{
+    color: white;
+  }
   
   .text-dark {
     color: var(--dark-color);
+    font-weight: 650;
   }
   
   .center{
@@ -200,7 +220,8 @@
   .badge-light,
   .alert-light {
     background: var(--light-color);
-    color: #333;
+    /* background: #64a4c6 ; */
+    color:#64a4c6 ;
   }
   
   .btn-dark,
@@ -288,7 +309,7 @@
   /* Forms */
 
   .form{
-    background : rgba(255,255,255,0.85);
+    background : var(--dark-color);
     color : #333;
     padding : 2rem;
     min-width: 30%;
@@ -369,7 +390,7 @@
     border-bottom: solid 1px #39A2DB;
     opacity:0.9;
     font-size: 1.3rem;
-    background-color: #39A2DB;
+    background-color: var(--dark-color);
   }
   
   .navbar ul {
@@ -415,12 +436,12 @@ text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
   /* Landing Page */
   .landing {
     position: relative;
-    background : url("./components/img/drug4.jpeg") no-repeat center center/cover;
+    background : url("./components/img/drug8.jpg") no-repeat center center/cover;
     height: 100vh;
   }
   
   .landing-inner {
-    color: #E8F0F2;
+    color: white;
     height: 100%;
     width: 80%;
     margin: auto;
@@ -594,7 +615,7 @@ text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
   
     /* Text Styles */
     .x-large {
-      font-size: 4rem;
+      font-size: 10rem;
     }
   
     .large {
@@ -682,10 +703,12 @@ text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
 
   .card-6 {
     text-align: center;
+    color: white;
+    font-weight: 450;
     padding : 1.25rem;
     margin : 1rem;
     border-radius: 10px;
-    background : rgba(255,255,255,0.85);
+    background : var(--dark-color);
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   }
 
@@ -714,7 +737,8 @@ text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
     margin : 1rem;
     flex-direction: column;
     border-radius: 10px;
-    background : rgba(255,255,255,0.85);
+    /* background : rgba(255,255,255,0.85); */
+    background: var(--dark-color);
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   }
 

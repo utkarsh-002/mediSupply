@@ -17,7 +17,7 @@ const AllUser = ({user:{users,loading},getAllUser}) => {
         {/* <h1>All Drugs</h1> */}
         <Fragment>
             {loading ? <p className="lead">Users loading.....</p> : <Fragment>
-                <p className="lead">
+                <p className="lead text-primary">
                     { ' ' } Browse Available Users
                 </p>
                 <div className="profiles" style={profile_display}>

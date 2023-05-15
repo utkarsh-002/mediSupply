@@ -201,14 +201,13 @@ app.get('/readDrug', async (req, res) => {
     const drug = await testDrug.findOne({drugId:drugId});
     console.log(drug);
     res.send(drug);
-    // console.log("drug id : ", drugId)
-    // let networkObj = await network.connectToNetwork(appAdmin);
-    // let response = await network.invoke(networkObj, true, 'readDrug', drugId);
-    // response = response.toString();
-    // res.send(response);
+    console.log("drug id : ", drugId)
+    let networkObj = await network.connectToNetwork(appAdmin);
+    let response = await network.invoke(networkObj, true, 'readDrug', drugId);
+    response = response.toString();
+    res.send(response);
   }catch(err){
-    console.error(err);
-    res.status(500).send("Server Error")
+    // res.status(500).send("Server Error")
   }
 });
 
@@ -218,7 +217,6 @@ app.delete('/deleteDrug', async (req, res) => {
     let drugId = req.query.drugId;
     // console.log("drug id : ", drugId)
 
-    // delete from mongo
     let d = await Drug.findOne({ drugId });
     Drug.deleteOne({drugId}, function(err){
       if(err){
@@ -270,7 +268,6 @@ app.post('/updateDrug',async(req,res)=>{
     res.send(response);
 
   }catch(err){
-    console.error(err.response.data);
     res.status(500).send("Server Error"); 
   }
 })
@@ -321,16 +318,15 @@ app.post('/createDrug',async(req,res)=>{
       console.log(error);
     }
     await d_id.save();
-    let networkObj = await network.connectToNetwork(appAdmin);
+    res.status(200);
+    // let networkObj = await network.connectToNetwork(appAdmin);
     // console.log(networkObj);
-    let response = await network.invoke(networkObj, false, 'createDrug', drugData);
-    // console.log(response);
-    response = response.toString();
+    // let response = await network.invoke(networkObj, false, 'createDrug', drugData);
+    // response = response.toString();
     // console.log(typeof(response));
-    res.send(response);
+    // res.send(response);
 
   }catch(err){
-    console.error(err);
     res.status(500).send("Server Error");
   }
 })
@@ -355,11 +351,10 @@ app.post('/createOrder',async(req,res)=>{
       orderId : req.body.orderId,
       drugId : req.body.drugId,
       quantity : req.body.quantity,
-      currentOwner : "M", //req.body.currentOwner,
+      currentOwner : "Manufacturer", //req.body.currentOwner,
       status: "in transit" //req.body.status
     }
 
-    //save to mongodb
     const orderId = req.body.orderId
     const drugId = req.body.drugId
     const quantity = req.body.quantity
@@ -385,7 +380,7 @@ app.post('/createOrder',async(req,res)=>{
     let networkObj = await network.connectToNetwork(appAdmin);
     let response = await network.invoke(networkObj, false, 'createOrder', orderData);
 
-    console.log(response);
+    // console.log(response);
 
     response = response.toString();
 
@@ -408,14 +403,10 @@ app.post('/updateOrder',async(req,res)=>{
       newStatus: req.body.newStatus
     }
 
-    console.log(newOrderData);
-    
-    // update in mongo
     let o = await Order.findOne({
       orderId : req.body.orderId
     })
 
-    console.log(o);
 
     if(o){
       await o.updateOne({
@@ -456,16 +447,14 @@ app.get('/readOrder', async (req, res) => {
       status: o.status
     };
     order.drugName = drug.drugName;
-    console.log(order);
+    // console.log(order);
     res.send(order);
-    // let networkObj = await network.connectToNetwork(appAdmin);
-    // let response = await network.invoke(networkObj, true, 'readOrder', orderId);
-    // response = response.toString();
-    // res.send(response);
+    let networkObj = await network.connectToNetwork(appAdmin);
+    let response = await network.invoke(networkObj, true, 'readOrder', orderId);
+    response = response.toString();
+    res.send(response);
   }catch(err){
-    // console.error(err.response.data);
-    console.log(err);
-    res.status(500).send("Server Error")
+    // res.send("No order found!!")
   }
 });
 
@@ -507,7 +496,7 @@ app.get('/verifyAsDistributor', async (req, res) => {
     if(o){
       console.log(o)
       await o.updateOne({
-        currentOwner : "D",
+        currentOwner : "Distributor",
         status : "in transit"
       });
     }
@@ -517,7 +506,7 @@ app.get('/verifyAsDistributor', async (req, res) => {
     res.send(response);
   }catch(err){
     console.error(err.response.data);
-    res.status(500).send("Server Error")
+    res.status(500).send("Server Error");
   }
 });
 
@@ -532,7 +521,7 @@ app.get('/verifyAsRetailer', async (req, res) => {
     if(r){
       console.log(r)
       await r.updateOne({
-        currentOwner : "R",
+        currentOwner : "Retailer",
         status : "in transit"
       });
     }

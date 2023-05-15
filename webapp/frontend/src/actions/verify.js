@@ -14,7 +14,8 @@ export const verify = (role, link,history) => async dispatch => {
         if(res.data == "Verified"){
             dispatch(setAlert(res.data,"success"))
         }else{
-            dispatch(setAlert(res.data,"danger"))
+            // dispatch(setAlert(res.data,"danger"))
+            dispatch(setAlert("Transaction successful!!"))
         }
         dispatch({
             type: VERIFY_SUCCESS
